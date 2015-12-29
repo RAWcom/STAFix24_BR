@@ -98,9 +98,6 @@
     <Compile Include="Tools.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Features\Feature1\Feature1.feature">
-      <FeatureId>{56183975-a793-476f-ba79-61ca8278a126}</FeatureId>
-    </None>
     <None Include="GFR_K\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{b2fdea66-cd38-43b2-98c3-f78aabf4eb3b}</SharePointProjectItemId>
     </None>
@@ -127,11 +124,10 @@
       <SharePointProjectItemId>{319d9e60-832a-4002-b9cc-e7fe292da6f3}</SharePointProjectItemId>
     </None>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="Features\Feature1\Feature1.Template.xml">
-      <DependentUpon>Feature1.feature</DependentUpon>
-    </Content>
+    <Folder Include="Features\" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="GFR_K\Elements.xml" />
     <Content Include="ObslugaWiadomosci\Elements.xml" />
     <Content Include="swfObslugaKartKontrolnych\Elements.xml" />
