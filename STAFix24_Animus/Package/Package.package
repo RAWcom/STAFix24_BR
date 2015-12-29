@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="1e96213e-4c6f-48a5-afd2-106a06e268a8" solutionId="1e96213e-4c6f-48a5-afd2-106a06e268a8" resetWebServer="false" name="STAFix24_Animus" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+  <assemblies>
+    <projectOutputAssembly location="STAFix24.Ewajer.BLL.dll" deploymentTarget="GlobalAssemblyCache" projectPath="..\BLL\BLL.csproj" />
+  </assemblies>
+  <features>
+    <featureReference itemId="34ecb22c-c0c5-497b-9fba-5229fd868dd3" />
+    <featureReference itemId="b05bf8c5-0365-4f4a-bdf1-04344e1144ca" />
+    <featureReference itemId="d40d4b38-13a3-45ed-bf6e-c86fbf5a9978" />
+  </features>
+  <projectItems>
+    <projectItemReference itemId="348bef8e-f411-4079-adeb-8646bc1f082e" />
+  </projectItems>
+</package>
