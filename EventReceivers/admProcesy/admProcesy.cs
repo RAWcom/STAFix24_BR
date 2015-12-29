@@ -32,23 +32,14 @@ namespace EventReceivers.admProcesy
                         SPSecurity.RunWithElevatedPrivileges(delegate()
                         {
                             //GFR_K_Request.Create(item);
-                            BLL.Logger.LogEvent_Procedure("WF:Generuj formatki rozliczeniowe dla klienta", item, "init");
                             BLL.Workflows.StartWorkflow(item, _WF_GFR_K);
-                            BLL.Logger.LogEvent_Procedure("WF:Generuj formatki rozliczeniowe dla klienta", item, "end");
                         });
                         break;
                     case _CT_GFR:
-                        //SPSecurity.RunWithElevatedPrivileges(delegate()
-                        // {
                         this.EventFiringEnabled = false;
                         GFR_Request.Create(item);
-                        this.EventFiringEnabled = true;
-
-                        Start_GFR_K_Workflows(item);
-
-                        //BLL.Logger.LogEvent_Procedure("WF:Generuj formatki rozliczeniowe", item, "init");
                         //BLL.Workflows.StartWorkflow(item, "Generuj formatki rozliczeniowe");
-                        //});
+                        this.EventFiringEnabled = true;
                         break;
                     case "Obsługa wiadomości":
                         this.EventFiringEnabled = false;
