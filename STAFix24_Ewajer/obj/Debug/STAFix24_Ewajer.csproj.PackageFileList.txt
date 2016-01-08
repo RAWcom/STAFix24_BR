@@ -1,1 +1,1 @@
-bin\Debug\STAFix24_Animus.wsp
+bin\Debug\STAFix24_Ewajer.wsp
