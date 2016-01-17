@@ -12,24 +12,24 @@ namespace Stafix.Features.TimerJobs
         {
             public override void FeatureActivated(SPFeatureReceiverProperties properties)
             {
-                //SPSite site = properties.Feature.Parent as SPSite;
+                SPSite site = properties.Feature.Parent as SPSite;
 
-                //try
-                //{
-                //    Stafix.TimerJobs.ObslugaWiadomosciTJ.CreateTimerJob(site);
-                //    Stafix.TimerJobs.PrzygotowanieWiadomosciTJ.CreateTimerJob(site);
-                //}
-                //catch (Exception ex)
-                //{
-                //    ElasticEmail.EmailGenerator.ReportError(ex, site.Url);
-                //}
+                try
+                {
+                    Stafix.TimerJobs.ObslugaWiadomosciTJ.CreateTimerJob(site);
+                    //Stafix.TimerJobs.PrzygotowanieWiadomosciTJ.CreateTimerJob(site);
+                }
+                catch (Exception ex)
+                {
+                    ElasticEmail.EmailGenerator.ReportError(ex, site.Url);
+                }
             }
 
             public override void FeatureDeactivating(SPFeatureReceiverProperties properties)
             {
-                //var site = properties.Feature.Parent as SPSite;
-                //Stafix.TimerJobs.ObslugaWiadomosciTJ.DelteTimerJob(site);
-                //Stafix.TimerJobs.PrzygotowanieWiadomosciTJ.DelteTimerJob(site);
+                var site = properties.Feature.Parent as SPSite;
+                Stafix.TimerJobs.ObslugaWiadomosciTJ.DelteTimerJob(site);
+                Stafix.TimerJobs.PrzygotowanieWiadomosciTJ.DelteTimerJob(site);
             }
         }
   

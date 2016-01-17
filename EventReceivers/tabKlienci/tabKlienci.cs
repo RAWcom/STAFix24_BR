@@ -112,17 +112,20 @@ namespace EventReceivers.tabKlienci
             //nazwa prezentowana
             switch (item.ContentType.Name)
             {
+                case "Prospekt":
+                    Set_NazwaPrezentowana_Prospekt(item);
+                    break;
                 case "Klient":
                     Set_NazwaPrezentowana_Klient(item);
                     break;
                 case "Osoba fizyczna":
                     Set_NazwaPrezentowana_OsobaFizyczna(item);
                     break;
+                case "Powiązanie":
+                    Set_NazwaPrezentowana_Powiazanie(item);
+                    break;
                 case "Firma zewnętrzna":
                     Set_NazwaPrezentowana_FirmaZewnetrzna(item);
-                    break;
-                case "Firma wewnętrzna":
-                    Set_NazwaPrezentowana_FirmaWewnetrzna(item);
                     break;
                 default:
                     //Prospekt
@@ -140,17 +143,22 @@ namespace EventReceivers.tabKlienci
 
         }
 
-        private void Set_NazwaPrezentowana_FirmaWewnetrzna(SPListItem item)
+        private void Set_NazwaPrezentowana_Prospekt(SPListItem item)
         {
-            string result = BLL.Tools.Get_LookupValue(item, "selKlient_NazwaSkrocona");
+            string result = BLL.Tools.Get_Text(item, "colNazwaSkrocona");
 
-            result = result + @" | " + BLL.Tools.Get_LookupValue(item, "selKlient");
-
-            item["_NazwaPrezentowana"] = result.Trim();
+            item["_NazwaPrezentowana"] = result.Trim() + " : PROSPEKT";
         }
 
+        private void Set_NazwaPrezentowana_Powiazanie(SPListItem item)
+        {
+            string firma = BLL.Tools.Get_LookupValue(item, "selKlient_NazwaSkrocona");
+            string wspolnik = BLL.Tools.Get_LookupValue(item, "selKlient");
 
-        private static void Set_NazwaPrezentowana_Klient(SPListItem item)
+            item["_NazwaPrezentowana"] = firma + @" " + wspolnik;
+        }
+
+        private  void Set_NazwaPrezentowana_Klient(SPListItem item)
         {
             string result = BLL.Tools.Get_Text(item, "colNazwaSkrocona");
             string nip = BLL.Tools.Get_Text(item, "colNIP");
@@ -164,20 +172,19 @@ namespace EventReceivers.tabKlienci
 
         private void Set_NazwaPrezentowana_FirmaZewnetrzna(SPListItem item)
         {
-            string firma = BLL.Tools.Get_LookupValue(item, "selKlient_NazwaSkrocona");
-
             string result = BLL.Tools.Get_Text(item, "colNazwaFirmy");
-            result = result + " NIP: " + BLL.Tools.Get_Text(item, "colNIP");
 
-            item["_NazwaPrezentowana"] = firma + @" | " + result.Trim();
+            string nip = BLL.Tools.Get_Text(item, "colNIP");
+            if (!string.IsNullOrEmpty(nip))
+            {
+                result = result + " NIP:" + nip;
+            }
+
+            item["_NazwaPrezentowana"] = @":: " + result;
         }
 
-
-
-        private static void Set_NazwaPrezentowana_OsobaFizyczna(SPListItem item)
+        private void Set_NazwaPrezentowana_OsobaFizyczna(SPListItem item)
         {
-            string firma = BLL.Tools.Get_LookupValue(item, "selKlient_NazwaSkrocona");
-
             string result = BLL.Tools.Get_Text(item, "colNazwisko");
             string imie = BLL.Tools.Get_Text(item, "colImie");
             if (!string.IsNullOrEmpty(imie))
@@ -191,7 +198,7 @@ namespace EventReceivers.tabKlienci
                 result = result + " PESEL:" + pesel;
             }
 
-            item["_NazwaPrezentowana"] = firma + @" | " + result.Trim();
+            item["_NazwaPrezentowana"] = @": "+result.Trim();
         }
 
         private void Update_Serwisy(SPListItem item)

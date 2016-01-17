@@ -8,6 +8,7 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Net;
 using System.Net.Sockets;
+using System.Diagnostics;
 
 namespace BLL
 {
@@ -432,14 +433,15 @@ namespace BLL
 
         public static string Format_Konto(string s)
         {
-
             if (!string.IsNullOrEmpty(s))
             {
                 Regex rgx = new Regex("[^0-9]");
                 s = rgx.Replace(s, "");
                 if (s.Length == 26)
                 {
-                    return Convert.ToDecimal(s).ToString("## #### #### #### #### #### ####");
+                    s = "1" + s;
+                    string r = Convert.ToDecimal(s).ToString("### #### #### #### #### #### ####");
+                    return r.Substring(1, r.Length - 1);
                 } 
             }
 
@@ -460,7 +462,7 @@ namespace BLL
 
         public static SPFieldMultiChoiceValue Get_MutichoiceValue(SPListItem item, string col)
         {
-            return new SPFieldMultiChoiceValue(item[col].ToString());
+            return new SPFieldMultiChoiceValue(Get_Text(item, col));
         }
 
 
@@ -490,6 +492,13 @@ namespace BLL
             }
 
             return kopiaDla;
+        }
+
+        public static bool Has_SelectedOptions(SPListItem item, string col)
+        {
+            SPFieldMultiChoiceValue v = Get_MutichoiceValue(item, col);
+            if (v.Count>0) return true;
+            else return false;
         }
     }
 }

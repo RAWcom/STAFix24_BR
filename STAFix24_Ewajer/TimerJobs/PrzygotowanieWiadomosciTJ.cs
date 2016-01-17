@@ -12,11 +12,12 @@ namespace Stafix.TimerJobs
         public static void CreateTimerJob(SPSite site)
         {
             var timerJob = new PrzygotowanieWiadomosciTJ(site);
-            timerJob.Schedule = new SPMinuteSchedule
+            timerJob.Schedule = new SPDailySchedule
             {
-                BeginSecond = 0,
-                EndSecond = 0,
-                Interval = 1
+                   BeginHour=6,
+                   BeginMinute=0,
+                   EndHour =6,
+                   EndMinute = 15
             };
 
             timerJob.Update();
@@ -56,7 +57,7 @@ namespace Stafix.TimerJobs
             {
                 try
                 {
-                    BLL.Workflows.StartSiteWorkflow(site, "Obsługa wiadomości oczekujących");
+                    BLL.Workflows.StartSiteWorkflow(site, "Obsługa kart kontrolnych");
                 }
                 catch (Exception ex)
                 {

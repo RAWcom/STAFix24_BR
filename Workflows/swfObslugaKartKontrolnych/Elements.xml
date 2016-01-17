@@ -7,7 +7,7 @@ Name="[NAME]" ==> Name="MyWorkflow" -->
 <Elements xmlns="http://schemas.microsoft.com/sharepoint/">
   <Workflow
      Name="Obsługa kart kontrolnych"
-     Description="My SharePoint Workflow"
+     Description="Dla wszystkich kart kontrolnych zawierających zwolnione do wysyłki informacje uruchamia proces przygotowania wiadomości"
      Id="54743C0D-B49A-495C-A3DE-F46094E60195"
      CodeBesideClass="Workflows.swfObslugaKartKontrolnych.swfObslugaKartKontrolnych"
      CodeBesideAssembly="$assemblyname$">

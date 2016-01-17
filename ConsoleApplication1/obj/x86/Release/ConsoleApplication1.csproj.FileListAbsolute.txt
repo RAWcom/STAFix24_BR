@@ -1,0 +1,5 @@
+C:\Users\Administrator\Documents\GitHub\Ewajer\ConsoleApplication1\bin\Release\ConsoleApplication1.exe
+C:\Users\Administrator\Documents\GitHub\Ewajer\ConsoleApplication1\bin\Release\ConsoleApplication1.pdb
+C:\Users\Administrator\Documents\GitHub\Ewajer\ConsoleApplication1\obj\x86\Release\ConsoleApplication1.csprojResolveAssemblyReference.cache
+C:\Users\Administrator\Documents\GitHub\Ewajer\ConsoleApplication1\obj\x86\Release\ConsoleApplication1.exe
+C:\Users\Administrator\Documents\GitHub\Ewajer\ConsoleApplication1\obj\x86\Release\ConsoleApplication1.pdb

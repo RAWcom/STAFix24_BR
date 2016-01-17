@@ -54,6 +54,9 @@
     <Compile Include="Features\CustomActions\CustomActions.EventReceiver.cs">
       <DependentUpon>CustomActions.feature</DependentUpon>
     </Compile>
+    <Compile Include="Features\TimerJobs\TimerJobs.EventReceiver.cs">
+      <DependentUpon>TimerJobs.feature</DependentUpon>
+    </Compile>
     <Compile Include="Features\Workflows\Workflows.EventReceiver.cs">
       <DependentUpon>Workflows.feature</DependentUpon>
     </Compile>
@@ -80,6 +83,9 @@
     <None Include="Features\EventReceivers\EventReceivers.feature">
       <FeatureId>{b05bf8c5-0365-4f4a-bdf1-04344e1144ca}</FeatureId>
     </None>
+    <None Include="Features\TimerJobs\TimerJobs.feature">
+      <FeatureId>{178471ae-17ed-4e3a-8710-6f7994f8b729}</FeatureId>
+    </None>
     <None Include="Features\Workflows\Workflows.feature">
       <FeatureId>{34ecb22c-c0c5-497b-9fba-5229fd868dd3}</FeatureId>
     </None>
@@ -105,6 +111,9 @@
     </Content>
     <Content Include="Features\EventReceivers\EventReceivers.Template.xml">
       <DependentUpon>EventReceivers.feature</DependentUpon>
+    </Content>
+    <Content Include="Features\TimerJobs\TimerJobs.Template.xml">
+      <DependentUpon>TimerJobs.feature</DependentUpon>
     </Content>
     <Content Include="Features\Workflows\Workflows.Template.xml">
       <DependentUpon>Workflows.feature</DependentUpon>

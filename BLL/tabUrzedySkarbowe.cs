@@ -38,7 +38,7 @@ namespace BLL
             SPListItem item = list.GetItemById(urzadId);
             if (item != null)
             {
-                return item["colPIT_Konto"] != null ? item["colPIT_Konto"].ToString() : string.Empty;
+                return BLL.Tools.Get_Text(item, "colPIT_Konto");
             }
 
             return string.Empty;
@@ -65,7 +65,7 @@ namespace BLL
             SPListItem item = list.GetItemById(urzadId);
             if (item != null)
             {
-                return item["colCIT_Konto"] != null ? item["colCIT_Konto"].ToString() : string.Empty;
+                return BLL.Tools.Get_Text(item, "colCIT_Konto");
             }
 
             return string.Empty;
@@ -77,7 +77,7 @@ namespace BLL
             SPListItem item = list.GetItemById(urzadId);
             if (item != null)
             {
-                return item["colVAT_Konto"] != null ? item["colVAT_Konto"].ToString() : string.Empty;
+                return BLL.Tools.Get_Text(item, "colVAT_Konto");
             }
 
             return string.Empty;

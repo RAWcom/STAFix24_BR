@@ -15,10 +15,9 @@ namespace BLL
         public static Array Get_AktywniKlienci(SPWeb web)
         {
             SPList targetList = web.Lists.TryGetList(listName);
-            Array result = null;
 
-            result = targetList.Items.Cast<SPListItem>()
-                .Where(i => i["enumStatus"].ToString() == "Aktywny")
+            Array result = targetList.Items.Cast<SPListItem>()
+                .Where(i => BLL.Tools.Get_Text(i,"enumStatus").Equals("Aktywny"))
                 .ToArray();
 
             return result;
@@ -30,7 +29,7 @@ namespace BLL
             Array result = null;
 
             result = targetList.Items.Cast<SPListItem>()
-                .Where(i => i["enumStatus"].ToString() == "Aktywny")
+                .Where(i => BLL.Tools.Get_Text(i, "enumStatus").Equals("Aktywny"))
                 .Where(i => new SPFieldLookupValueCollection(i["selSewisy"].ToString()).Count > 0)
                 .ToArray();
 
@@ -87,7 +86,7 @@ namespace BLL
             //if (list!=null)
             //{
             SPListItem item = list.Items.Cast<SPListItem>()
-                .Where(i => i["ContentType"].ToString() == "Klient")
+                .Where(i => i.ContentType.Name.Equals("Klient"))
                 .Where(i => i["colNazwaSkrocona"].ToString().ToUpper() == nazwaSkrocona.ToUpper())
                 .SingleOrDefault();
 

@@ -69,6 +69,7 @@
     <Compile Include="tabKlienci\tabKlienci.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="tabSzablonyWiadomosci\tabSzablonyWiadomosci.cs" />
     <Compile Include="tabZadania\tabZadania.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -88,6 +89,9 @@
     </None>
     <None Include="tabKlienci\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{0273b94d-9933-4fd1-819f-f789514aeef3}</SharePointProjectItemId>
+    </None>
+    <None Include="tabSzablonyWiadomosci\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{03c8891f-1cc7-45ba-abeb-de4ea8ce398a}</SharePointProjectItemId>
     </None>
     <None Include="tabZadania\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{3750d70c-be77-4fbc-9462-425f9744c743}</SharePointProjectItemId>
@@ -110,6 +114,7 @@
     <Content Include="tabKlienci\Elements.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="tabSzablonyWiadomosci\Elements.xml" />
     <Content Include="tabZadania\Elements.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

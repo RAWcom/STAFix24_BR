@@ -15,6 +15,6 @@ C:\_GitHub\Animus\BLL\obj\Debug\STAFix24.Animus.BLL.dll
 C:\_GitHub\Animus\BLL\obj\Debug\STAFix24.Animus.BLL.pdb
 C:\Users\Administrator\Documents\GitHub\Ewajer\BLL\bin\Debug\STAFix24.Ewajer.BLL.dll
 C:\Users\Administrator\Documents\GitHub\Ewajer\BLL\bin\Debug\STAFix24.Ewajer.BLL.pdb
-C:\Users\Administrator\Documents\GitHub\Ewajer\BLL\obj\Debug\BLL.csprojResolveAssemblyReference.cache
 C:\Users\Administrator\Documents\GitHub\Ewajer\BLL\obj\Debug\STAFix24.Ewajer.BLL.dll
 C:\Users\Administrator\Documents\GitHub\Ewajer\BLL\obj\Debug\STAFix24.Ewajer.BLL.pdb
+C:\Users\Administrator\Documents\GitHub\Ewajer\BLL\obj\Debug\BLL.csprojResolveAssemblyReference.cache
