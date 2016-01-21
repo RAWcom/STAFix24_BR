@@ -9,6 +9,8 @@ using System.Text.RegularExpressions;
 using System.Net;
 using System.Net.Sockets;
 using System.Diagnostics;
+using System.Collections;
+using System.Threading;
 
 namespace BLL
 {
@@ -397,14 +399,6 @@ namespace BLL
             return item[col] != null ? Convert.ToInt32(item.ToString()) : 0;
         }
 
-        internal static void Copy_Attachement(SPListItem item, SPFile file)
-        {
-            int bufferSize = 20480;
-            byte[] byteBuffer = new byte[bufferSize];
-            byteBuffer = file.OpenBinary();
-            item.Attachments.Add(file.Name, byteBuffer);
-        }
-
         public static void Set_Flag(SPListItem item, string col, bool value)
         {
                 item[col] = value;
@@ -499,6 +493,74 @@ namespace BLL
             SPFieldMultiChoiceValue v = Get_MutichoiceValue(item, col);
             if (v.Count>0) return true;
             else return false;
+        }
+
+
+        /// <summary>
+        /// wywołanie procedury
+        /// string url = item.Attachments.UrlPrefix + item.Attachments[attachmentIndex];
+        /// SPFile file = item.ParentList.ParentWeb.GetFile(url);
+        /// if (file.Exist)
+        ///     CopyAttachement(newItem, file);
+        /// endif
+        /// </summary>
+        /// <param name="newItem"></param>
+        /// <param name="file"></param>
+        internal static void Copy_Attachement(SPListItem newItem, SPFile file)
+        {
+            int bufferSize = 20480;
+            byte[] byteBuffer = new byte[bufferSize];
+            byteBuffer = file.OpenBinary();
+            newItem.Attachments.Add(file.Name, byteBuffer);
+        }
+
+        public static void CopyAttachemensUrl(SPListItem srcItem, ref ArrayList a)
+        {
+            for (int attachmentIndex = 0; attachmentIndex < srcItem.Attachments.Count; attachmentIndex++)
+            {
+                string url = srcItem.Attachments.UrlPrefix + srcItem.Attachments[attachmentIndex];
+                SPFile file = srcItem.ParentList.ParentWeb.GetFile(url);
+
+                if (file.Exists)
+                {
+                    a.Add(url);
+                }
+            }
+
+        }
+
+        
+        /// <summary>
+        /// Wywołanie funkcji:
+        /// DoWithRetry(DoSomething)
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="sleepPeriod"></param>
+        /// <param name="retryCount"></param>
+        //public void DoWithRetry(Action action)
+        public static void DoWithRetry(Action action)
+        {
+            TimeSpan sleepPeriod = TimeSpan.FromSeconds(2);
+            int retryCount = 3;
+
+            Debug.WriteLine("DoWithRetry activated");
+
+            while(true)
+            {
+                try
+                {
+                    action();  
+                    break; // success!      
+                }
+                catch (Exception ex)
+                {
+                    if(--retryCount == 0)
+                        throw; 
+                    else Thread.Sleep(sleepPeriod);
+
+                    var r = ElasticEmail.EmailGenerator.ReportError(ex, "No of retries left: " + retryCount.ToString());
+                } 
+            }
         }
     }
 }

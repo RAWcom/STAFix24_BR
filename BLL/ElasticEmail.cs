@@ -6,6 +6,7 @@ using System.Net;
 using System.Collections.Specialized;
 using Microsoft.SharePoint;
 using BLL;
+using System.Net.Mail;
 
 namespace ElasticEmail
 {
@@ -13,11 +14,6 @@ namespace ElasticEmail
     public class EmailGenerator
 
     {
-        //e9b604ee-e197-44a3-a0fa-6b23cf9ec0bb - profil: stafix24@hotmail.com
-        //46779a46-20ab-4670-99b8-b44a9a6f45b5 - profil: biuro@rawcom24.pl
-
-        const string USERNAME = "e9b604ee-e197-44a3-a0fa-6b23cf9ec0bb";
-        const string API_KEY = "e9b604ee-e197-44a3-a0fa-6b23cf9ec0bb";
 
         public static string ReportError(Exception ex, string webUrl, string extraInfo)
         {
@@ -37,7 +33,7 @@ namespace ElasticEmail
                 sb.AppendFormat(@"<div>{0}</div>", extraInfo);
             }
 
-            return ElasticEmail.EmailGenerator.SendMail(subject, sb.ToString());
+            return SendMail(subject, sb.ToString());
 
         }
 
@@ -45,15 +41,29 @@ namespace ElasticEmail
         {
             return ReportError(ex, webUrl, string.Empty);
         }
-        
+
+
         public static string SendMail(string subject, string bodyHtml)
         {
+            //ElasticEmail
 
             string from = "mailer@stafix24.pl";
             string fromName = "STAFix24 Mailer";
             string to = "jacek.rawiak@hotmail.com";
             string bodyText = "Text Body";
 
+            return SendMailWithElasticEmailAPI(subject, bodyHtml, from, fromName, to, bodyText);
+        }
+
+        #region ElasticEmail
+
+        //e9b604ee-e197-44a3-a0fa-6b23cf9ec0bb - profil: stafix24@hotmail.com
+        //46779a46-20ab-4670-99b8-b44a9a6f45b5 - profil: biuro@rawcom24.pl
+
+        const string USERNAME = "e9b604ee-e197-44a3-a0fa-6b23cf9ec0bb";
+        const string API_KEY = "e9b604ee-e197-44a3-a0fa-6b23cf9ec0bb";
+        private static string SendMailWithElasticEmailAPI(string subject, string bodyHtml, string from, string fromName, string to, string bodyText)
+        {
             WebClient client = new WebClient();
             NameValueCollection values = new NameValueCollection();
             values.Add("username", USERNAME);
@@ -70,6 +80,9 @@ namespace ElasticEmail
             byte[] response = client.UploadValues("https://api.elasticemail.com/mailer/send", values);
             return Encoding.UTF8.GetString(response);
         }
+        
+        #endregion
+
 
         public static void SendProcessEndConfirmationMail(string subject, string bodyHtml, SPWeb web, SPItem item)
         {
@@ -106,7 +119,7 @@ namespace ElasticEmail
             sb.AppendFormat(@"<tr valign='top'><td>{0}</td><td>{1}</td></tr>", "Stack Trace", stackTrace);
             sb.Append(@"</table>");
 
-            return ElasticEmail.EmailGenerator.SendMail(subject, sb.ToString());
+            return SendMail(subject, sb.ToString());
         
         }
     }

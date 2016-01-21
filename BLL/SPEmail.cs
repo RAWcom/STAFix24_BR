@@ -106,12 +106,16 @@ namespace SPEmail
                 {
                     message.From = new MailAddress("noreply@stafix24.pl", message.From.DisplayName);
                 }
-               
 
+                message.IsBodyHtml = true;
+                //message.Attachments.Clear();
 
-                client.Send(message);
+                //client.Send(message);
+                BLL.Tools.DoWithRetry(() => client.Send(message));
+                
 
                 result = true;
+
             }
             catch (Exception ex)
             {

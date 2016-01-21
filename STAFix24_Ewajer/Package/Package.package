@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="36471287-FEB7-4959-B683-060793626282" solutionId="9B3F9159-AF92-4DF4-A465-F9A7BC8F5947" resetWebServer="false" name="STAFix24_Ewajer" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="36471287-feb7-4959-b683-060793626282" solutionId="9b3f9159-af92-4df4-a465-f9a7bc8f5947" resetWebServer="false" name="STAFix24_Ewajer" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
   <assemblies>
     <projectOutputAssembly location="STAFix24.Ewajer.BLL.dll" deploymentTarget="GlobalAssemblyCache" projectPath="..\BLL\BLL.csproj" />
   </assemblies>

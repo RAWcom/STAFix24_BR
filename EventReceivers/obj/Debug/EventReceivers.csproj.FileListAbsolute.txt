@@ -13,8 +13,3 @@ C:\_GitHub\Animus\EventReceivers\bin\Debug\STAFix24.Animus.EventReceivers.pdb
 C:\_GitHub\Animus\EventReceivers\obj\Debug\EventReceivers.csprojResolveAssemblyReference.cache
 C:\_GitHub\Animus\EventReceivers\obj\Debug\STAFix24.Animus.EventReceivers.dll
 C:\_GitHub\Animus\EventReceivers\obj\Debug\STAFix24.Animus.EventReceivers.pdb
-C:\Users\Administrator\Documents\GitHub\Ewajer\EventReceivers\bin\Debug\STAFix24.Ewajer.EventReceivers.dll
-C:\Users\Administrator\Documents\GitHub\Ewajer\EventReceivers\bin\Debug\STAFix24.Ewajer.EventReceivers.pdb
-C:\Users\Administrator\Documents\GitHub\Ewajer\EventReceivers\obj\Debug\EventReceivers.csprojResolveAssemblyReference.cache
-C:\Users\Administrator\Documents\GitHub\Ewajer\EventReceivers\obj\Debug\STAFix24.Ewajer.EventReceivers.dll
-C:\Users\Administrator\Documents\GitHub\Ewajer\EventReceivers\obj\Debug\STAFix24.Ewajer.EventReceivers.pdb

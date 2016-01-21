@@ -12,10 +12,18 @@ namespace Stafix.TimerJobs
         public static void CreateTimerJob(SPSite site)
         {
             var timerJob = new ObslugaWiadomosciTJ(site);
-            timerJob.Schedule = new SPHourlySchedule
+            //timerJob.Schedule = new SPHourlySchedule
+            //{
+            //    BeginMinute = 0,
+            //    EndMinute = 15,
+            //};
+
+            timerJob.Schedule = new SPDailySchedule
             {
+                BeginHour = 18,
                 BeginMinute = 0,
-                EndMinute = 15,
+                EndHour = 18,
+                EndMinute = 15
             };
 
             timerJob.Update();

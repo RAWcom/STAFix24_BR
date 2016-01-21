@@ -5,5 +5,6 @@
     <ElementManifest Location="dicUrzedySkarbowe\Elements.xml" />
     <ElementManifest Location="tabZadania\Elements.xml" />
     <ElementManifest Location="admProcesy\Elements.xml" />
+    <ElementManifest Location="tabSzablonyWiadomosci\Elements.xml" />
   </ElementManifests>
 </Feature>
