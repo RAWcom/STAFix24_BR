@@ -5,6 +5,8 @@ using System.Text;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Workflow;
 using System.Globalization;
+using System.Xml.Linq;
+using System.Diagnostics;
 
 namespace BLL
 {
@@ -29,7 +31,7 @@ namespace BLL
                         try
                         {
                             var result = manager.StartWorkflow(listItem, objWorkflowAssociation, objWorkflowAssociation.AssociationData, SPWorkflowRunOptions.SynchronousAllowPostpone);
-                            
+
                             //manager.StartWorkflow(listItem, objWorkflowAssociation, objWorkflowAssociation.AssociationData, true);
                             //The above line will start the workflow...
                         }
@@ -47,19 +49,23 @@ namespace BLL
 
         public static void StartSiteWorkflow(SPSite site, string workflowName)
         {
+            StartSiteWorkflow(site, workflowName, string.Empty);
+        }
+
+        public static void StartSiteWorkflow(SPSite site, string workflowName, string initParameters)
+        {
             using (SPWeb web = site.OpenWeb()) // get the web
             {
                 //find workflow to start
                 var assoc = web.WorkflowAssociations.GetAssociationByName(workflowName, CultureInfo.InvariantCulture);
 
                 //this is the call to start the workflow
-                var result = site.WorkflowManager.StartWorkflow(null, assoc, string.Empty, SPWorkflowRunOptions.Synchronous);
+                var result = site.WorkflowManager.StartWorkflow(null, assoc, initParameters , SPWorkflowRunOptions.Synchronous);
 
             }
-
         }
 
-        public static void AssociateSiteWorkflow(SPWeb web, string workflowTemplateBaseGuid,string workflowAssociationName, string workFlowTaskListName, string workFlowHistoryListName  )
+        public static void AssociateSiteWorkflow(SPWeb web, string workflowTemplateBaseGuid, string workflowAssociationName, string workFlowTaskListName, string workFlowHistoryListName)
         {
             SPWorkflowTemplateCollection workflowTemplates = web.WorkflowTemplates;
             SPWorkflowTemplate workflowTemplate = workflowTemplates.GetTemplateByBaseID(new Guid(workflowTemplateBaseGuid));
@@ -79,6 +85,38 @@ namespace BLL
                     web.WorkflowAssociations.Add(workflowAssociation);
                 }
             }
+        }
+
+        /// <summary>
+        /// przykładowe wywołania
+        /// string enhancedAssociationData = AddVariableToWorkflowAssociationData(wrkFl.AssociationData, "MyVeryOwnAssociationParameter", "SomeCrazyValue!!");
+        /// enhancedAssociationData = AddVariableToWorkflowAssociationData(enhancedAssociationData, "AnotherAssociationParameter", "AndYetAnotherCrazyValue");
+        /// siteColl.WorkflowManager.StartWorkflow(record, wrkFl, enhancedAssociationData, true);
+        /// 
+        /// http://blog.degree.no/2011/08/sharepoint-2010-programmatically-set-workflow-initiation-parameters/
+        /// </summary>
+        /// <param name="originalAssociationData"></param>
+        /// <param name="variableName"></param>
+        /// <param name="variableValue"></param>
+        /// <returns></returns>
+        public static string AddVariableToWorkflowAssociationData(string originalAssociationData, string variableName, string variableValue)
+        {
+            XNamespace dfs = "http://schemas.microsoft.com/office/infopath/2003/dataFormSolution";
+            XNamespace d = "http://schemas.microsoft.com/office/infopath/2009/WSSList/dataFields";
+
+            var associationDataXml = XElement.Parse(originalAssociationData);
+            if (associationDataXml == null
+                || associationDataXml.Element(dfs + "dataFields") == null
+                || associationDataXml.Element(dfs + "dataFields").Element(d + "SharePointListItem_RW") == null
+                || associationDataXml.Element(dfs + "dataFields").Element(d + "SharePointListItem_RW").Element(d + variableName) == null)
+            {
+                Debug.WriteLine("AddVariableToWorkflowAssociationData() unable to find node '" + variableName + "' in association data");
+                return originalAssociationData;
+            }
+            Debug.WriteLine("Setting workflow parameter '" + variableName + "' to '" + variableValue + "'");
+            var nodeToChange = associationDataXml.Element(dfs + "dataFields").Element(d + "SharePointListItem_RW").Element(d + variableName);
+            nodeToChange.SetValue(variableValue);
+            return associationDataXml.ToString();
         }
     }
 }

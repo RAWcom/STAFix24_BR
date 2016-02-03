@@ -638,7 +638,7 @@ namespace BLL
             Array result = null;
 
             result = targetList.Items.Cast<SPListItem>()
-                    .Where(i => i["enumStatus"].ToString().Equals("Aktywny"))
+                    .Where(i => BLL.Tools.Get_Text(i,"enumStatus").Equals("Aktywny"))
                     .Where(i => i.ContentType.Name.Equals(kmask))
                     .Where(i => new SPFieldLookupValueCollection(i["selSewisy"].ToString()).Count > 0)
                     .ToArray();
@@ -654,7 +654,7 @@ namespace BLL
             if (!string.IsNullOrEmpty(kmask))
             {
                 result = targetList.Items.Cast<SPListItem>()
-                        .Where(i => i["enumStatus"].ToString().Equals("Aktywny"))
+                        .Where(i => BLL.Tools.Get_Text(i, "enumStatus").Equals("Aktywny"))
                         .Where(i => i.ContentType.Name.Equals(kmask))
                         .Where(i => new SPFieldLookupValueCollection(i["selSewisy"].ToString()).Count > 0)
                         .ToArray();
@@ -662,7 +662,7 @@ namespace BLL
             else
             {
                 result = targetList.Items.Cast<SPListItem>()
-                        .Where(i => i["enumStatus"].ToString().Equals("Aktywny"))
+                        .Where(i => BLL.Tools.Get_Text(i, "enumStatus").Equals("Aktywny"))
                         .Where(i => new SPFieldLookupValueCollection(i["selSewisy"].ToString()).Count > 0)
                         .ToArray();
             }
@@ -680,7 +680,7 @@ namespace BLL
             SPList targetList = web.Lists.TryGetList(listName);
 
             Array results = targetList.Items.Cast<SPListItem>()
-                                .Where(i => i["enumStatus"].ToString() == "Aktywny")
+                                .Where(i => BLL.Tools.Get_Text(i,"enumStatus").Equals("Aktywny"))
                                 .Where(i => new SPFieldLookupValueCollection(i["selSewisy"].ToString()).Count > 0)
                                 .ToArray();
 

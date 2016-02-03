@@ -42,6 +42,7 @@ namespace Workflows.swfObslugaKartKontrolnych
             this.sequenceActivity1 = new System.Workflow.Activities.SequenceActivity();
             this.faultHandlersActivity1 = new System.Workflow.ComponentModel.FaultHandlersActivity();
             this.logEnd = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
+            this.UpdateRequestorStatus = new System.Workflow.Activities.CodeActivity();
             this.whileKartaKontrolna = new System.Workflow.Activities.WhileActivity();
             this.logSelected = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
             this.cmdGet_KartyKontrolne = new System.Workflow.Activities.CodeActivity();
@@ -109,6 +110,11 @@ namespace Workflows.swfObslugaKartKontrolnych
             this.logEnd.OtherData = "";
             this.logEnd.UserId = -1;
             // 
+            // UpdateRequestorStatus
+            // 
+            this.UpdateRequestorStatus.Name = "UpdateRequestorStatus";
+            this.UpdateRequestorStatus.ExecuteCode += new System.EventHandler(this.UpdateRequestorStatus_ExecuteCode);
+            // 
             // whileKartaKontrolna
             // 
             this.whileKartaKontrolna.Activities.Add(this.sequenceActivity1);
@@ -156,6 +162,7 @@ namespace Workflows.swfObslugaKartKontrolnych
             this.Activities.Add(this.cmdGet_KartyKontrolne);
             this.Activities.Add(this.logSelected);
             this.Activities.Add(this.whileKartaKontrolna);
+            this.Activities.Add(this.UpdateRequestorStatus);
             this.Activities.Add(this.logEnd);
             this.Activities.Add(this.faultHandlersActivity1);
             this.Name = "swfObslugaKartKontrolnych";
@@ -164,6 +171,8 @@ namespace Workflows.swfObslugaKartKontrolnych
         }
 
         #endregion
+
+        private CodeActivity UpdateRequestorStatus;
 
         private Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity logErrorMessage;
 
@@ -188,6 +197,7 @@ namespace Workflows.swfObslugaKartKontrolnych
         private CodeActivity cmdGet_KartyKontrolne;
 
         private Microsoft.SharePoint.WorkflowActions.OnWorkflowActivated onWorkflowActivated1;
+
 
 
 

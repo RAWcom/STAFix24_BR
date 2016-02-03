@@ -10,47 +10,35 @@ namespace EventReceivers.admProcesy
     {
         public static void Create(Microsoft.SharePoint.SPListItem item)
         {
-            try
+
+            BLL.Logger.LogEvent("Generowanie formatek rozliczeniowych", item.ID.ToString());
+
+            string mask = BLL.Tools.Get_Text(item, "colMaskaSerwisu");
+            string kmask = BLL.Tools.Get_Text(item, "colMaskaTypuKlienta");
+
+            if (!string.IsNullOrEmpty(kmask))
             {
-                BLL.Logger.LogEvent("Generowanie formatek rozliczeniowych", item.ID.ToString());
-
-                string mask = BLL.Tools.Get_Text(item, "colMaskaSerwisu");
-                string kmask = BLL.Tools.Get_Text(item, "colMaskaTypuKlienta");
-
-                if (!string.IsNullOrEmpty(kmask))
+                if (!string.IsNullOrEmpty(mask))
                 {
-                    if (!string.IsNullOrEmpty(mask))
-                    {
-                        Create_Bulk_FormsBy_KMask_Mask(item, kmask, mask);
-                    }
-                    else
-                    {
-                        Crate_Bulk_FormsBy_KMask(item, kmask);
-                    }
+                    Create_Bulk_FormsBy_KMask_Mask(item, kmask, mask);
                 }
                 else
                 {
-                    if (!string.IsNullOrEmpty(mask))
-                    {
-                        Create_Bulk_FormsBy_Mask(item, mask);
-                    }
-                    else
-                    {
-                        Crate_Bulk_Forms(item);
-                    }
+                    Crate_Bulk_FormsBy_KMask(item, kmask);
                 }
-
-#if DEBUG
-                BLL.Tools.Set_Text(item, "enumStatusZlecenia", "Zakończony");
-                item.SystemUpdate(); 
-#else
-                item.Delete();
-#endif
             }
-            catch (Exception ex)
+            else
             {
-                BLL.Logger.LogError(item.Web.Name, item.ID.ToString(), ex);
+                if (!string.IsNullOrEmpty(mask))
+                {
+                    Create_Bulk_FormsBy_Mask(item, mask);
+                }
+                else
+                {
+                    Crate_Bulk_Forms(item);
+                }
             }
+
         }
 
         private static void Create_Bulk_FormsBy_KMask_Mask(SPListItem item, string kmask, string mask)
@@ -121,6 +109,8 @@ namespace EventReceivers.admProcesy
             newItem["colMaskaSerwisu"] = mask;
 
             newItem.SystemUpdate();
+
+            BLL.Workflows.StartWorkflow(newItem, "Generuj formatki rozliczeniowe dla klienta");
         }
     }
 }

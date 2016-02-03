@@ -58,7 +58,6 @@ namespace Workflows.GFR_K
             try
             {
                 BLL.Tools.Set_Text(item, "enumStatusZlecenia", "Zakończony");
-                item.SystemUpdate();
             }
             catch (Exception ex)
             {
@@ -71,7 +70,6 @@ namespace Workflows.GFR_K
             try
             {
                 BLL.Tools.Set_Text(item, "enumStatusZlecenia", "Obsługa");
-                item.SystemUpdate();
             }
             catch (Exception ex)
             {
@@ -79,9 +77,9 @@ namespace Workflows.GFR_K
             }
         }
 
-        private void Delete_Item_ExecuteCode(object sender, EventArgs e)
+        private void UpdateItem_ExecuteCode(object sender, EventArgs e)
         {
-            item.Delete();
+            item.Update();
         }
 
 

@@ -65,6 +65,7 @@
     <Compile Include="TimerJobs\PrzygotowanieWiadomosciTJ.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CodeFragments.txt" />
     <None Include="CustomActions\AkcjeWitrynyMenu\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{38af4049-052e-4ec2-859a-bf8371d30740}</SharePointProjectItemId>
     </None>
@@ -84,7 +85,7 @@
       <FeatureId>{b05bf8c5-0365-4f4a-bdf1-04344e1144ca}</FeatureId>
     </None>
     <None Include="Features\TimerJobs\TimerJobs.feature">
-      <FeatureId>{178471ae-17ed-4e3a-8710-6f7994f8b729}</FeatureId>
+      <FeatureId>{6ff9fa36-0878-4a82-be9f-1d873aad25bb}</FeatureId>
     </None>
     <None Include="Features\Workflows\Workflows.feature">
       <FeatureId>{34ecb22c-c0c5-497b-9fba-5229fd868dd3}</FeatureId>

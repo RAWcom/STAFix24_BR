@@ -59,9 +59,12 @@ namespace Workflows.swfObslugaKartKontrolnych
             BLL.Workflows.StartWorkflow(item, "Przygotuj wiadomość dla klienta");
 
             logWorkflowStarted_HistoryOutcome = BLL.Tools.Get_LookupValue(item, "selKlient");
+
+            Debug.WriteLine(logWorkflowStarted_HistoryOutcome);
         }
 
         public String logWorkflowStarted_HistoryOutcome = default(System.String);
+        private string _ZAKONCZONY = "Zakończony";
 
         private void cmdErrorHandler_ExecuteCode(object sender, EventArgs e)
         {
@@ -79,6 +82,23 @@ namespace Workflows.swfObslugaKartKontrolnych
         private void onWorkflowActivated1_Invoked(object sender, ExternalDataEventArgs e)
         {
             Debug.WriteLine("swfObslugaKartKontrolnych - ACTIVATED");
+        }
+
+        private void UpdateRequestorStatus_ExecuteCode(object sender, EventArgs e)
+        {
+            int procesItemId = int.Parse(workflowProperties.InitiationData.ToString());
+
+            if (procesItemId>0)
+            {
+                Debug.Write("Element do akutalizacji: " + procesItemId.ToString());
+
+                SPListItem o = BLL.admProcesy.GetItemById(workflowProperties.Web, procesItemId);
+                if (o != null)
+                {
+                    BLL.Tools.Set_Text(o, "enumStatusZlecenia", _ZAKONCZONY);
+                    o.SystemUpdate();
+                }
+            }
         }
     }
 }

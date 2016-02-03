@@ -37,7 +37,7 @@ namespace Workflows.GFR_K
             this.faultHandlersActivity1 = new System.Workflow.ComponentModel.FaultHandlersActivity();
             this.cancellationHandlerActivity1 = new System.Workflow.ComponentModel.CancellationHandlerActivity();
             this.logStatus_Zakończony = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
-            this.Delete_Item = new System.Workflow.Activities.CodeActivity();
+            this.UpdateItem = new System.Workflow.Activities.CodeActivity();
             this.Status_Zakonczony = new System.Workflow.Activities.CodeActivity();
             this.Test_CT = new System.Workflow.Activities.IfElseActivity();
             this.logStatus_Obsługa = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
@@ -96,10 +96,10 @@ namespace Workflows.GFR_K
             this.logStatus_Zakończony.OtherData = "";
             this.logStatus_Zakończony.UserId = -1;
             // 
-            // Delete_Item
+            // UpdateItem
             // 
-            this.Delete_Item.Name = "Delete_Item";
-            this.Delete_Item.ExecuteCode += new System.EventHandler(this.Delete_Item_ExecuteCode);
+            this.UpdateItem.Name = "UpdateItem";
+            this.UpdateItem.ExecuteCode += new System.EventHandler(this.UpdateItem_ExecuteCode);
             // 
             // Status_Zakonczony
             // 
@@ -148,7 +148,7 @@ namespace Workflows.GFR_K
             this.Activities.Add(this.logStatus_Obsługa);
             this.Activities.Add(this.Test_CT);
             this.Activities.Add(this.Status_Zakonczony);
-            this.Activities.Add(this.Delete_Item);
+            this.Activities.Add(this.UpdateItem);
             this.Activities.Add(this.logStatus_Zakończony);
             this.Activities.Add(this.cancellationHandlerActivity1);
             this.Activities.Add(this.faultHandlersActivity1);
@@ -159,7 +159,7 @@ namespace Workflows.GFR_K
 
         #endregion
 
-        private CodeActivity Delete_Item;
+        private CodeActivity UpdateItem;
 
         private CodeActivity Status_Obsluga;
 
@@ -184,6 +184,7 @@ namespace Workflows.GFR_K
         private CodeActivity Run_GFR_K_Create;
 
         private Microsoft.SharePoint.WorkflowActions.OnWorkflowActivated onWorkflowActivated1;
+
 
 
 

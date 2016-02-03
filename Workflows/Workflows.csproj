@@ -47,6 +47,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Workflow.Activities" />
     <Reference Include="System.Workflow.ComponentModel" />
     <Reference Include="System.Workflow.Runtime" />
@@ -56,6 +58,18 @@
     <Reference Include="Microsoft.SharePoint.Security" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="admProcesyWF\admProcesyWF.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="admProcesyWF\admProcesyWF.Designer.cs">
+      <DependentUpon>admProcesyWF.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GFR\GFR.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GFR\GFR.Designer.cs">
+      <DependentUpon>GFR.cs</DependentUpon>
+    </Compile>
     <Compile Include="GFR_K\GFR_K.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -76,6 +90,12 @@
     </Compile>
     <Compile Include="swfObslugaKartKontrolnych\swfObslugaKartKontrolnych.Designer.cs">
       <DependentUpon>swfObslugaKartKontrolnych.cs</DependentUpon>
+    </Compile>
+    <Compile Include="tabZadaniaWF\tabZadaniaWF.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="tabZadaniaWF\tabZadaniaWF.Designer.cs">
+      <DependentUpon>tabZadaniaWF.cs</DependentUpon>
     </Compile>
     <Compile Include="wfPrzygotujWiadomoscDlaKlienta\PrzygotujWiadomosc.cs">
       <SubType>Component</SubType>
@@ -98,6 +118,12 @@
     <Compile Include="Tools.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="admProcesyWF\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{d0abb762-a079-423d-955c-7e3dcbb2c865}</SharePointProjectItemId>
+    </None>
+    <None Include="GFR\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{ba36556b-2a12-459c-923e-48e64cae837a}</SharePointProjectItemId>
+    </None>
     <None Include="GFR_K\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{b2fdea66-cd38-43b2-98c3-f78aabf4eb3b}</SharePointProjectItemId>
     </None>
@@ -114,6 +140,9 @@
     <None Include="swfObslugaKartKontrolnych\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{b11d2f4f-359d-4cde-aeff-ce8d0d67625e}</SharePointProjectItemId>
     </None>
+    <None Include="tabZadaniaWF\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{e0951b82-3f42-4064-a9f2-9c9c0275ca4c}</SharePointProjectItemId>
+    </None>
     <None Include="wfPrzygotujWiadomoscDlaKlienta\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{ed67c847-7cba-4151-94bb-a4c006d05bce}</SharePointProjectItemId>
     </None>
@@ -128,9 +157,13 @@
     <Folder Include="Features\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="admProcesyWF.aspx" />
+    <Content Include="admProcesyWF\Elements.xml" />
+    <Content Include="GFR\Elements.xml" />
     <Content Include="GFR_K\Elements.xml" />
     <Content Include="ObslugaWiadomosci\Elements.xml" />
     <Content Include="swfObslugaKartKontrolnych\Elements.xml" />
+    <Content Include="tabZadaniaWF\Elements.xml" />
     <Content Include="wfPrzygotujWiadomoscDlaKlienta\Elements.xml" />
     <Content Include="swfObslugaWiadomosciOczekujacych\Elements.xml" />
     <Content Include="swfStratyZLatUbieglych\Elements.xml" />

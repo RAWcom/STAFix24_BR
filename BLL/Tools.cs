@@ -533,11 +533,12 @@ namespace BLL
         /// <summary>
         /// Wywołanie funkcji:
         /// DoWithRetry(DoSomething)
+        /// example:
+        /// BLL.Tools.DoWithRetry(() => client.Send(message));
         /// </summary>
         /// <param name="action"></param>
         /// <param name="sleepPeriod"></param>
         /// <param name="retryCount"></param>
-        //public void DoWithRetry(Action action)
         public static void DoWithRetry(Action action)
         {
             TimeSpan sleepPeriod = TimeSpan.FromSeconds(2);

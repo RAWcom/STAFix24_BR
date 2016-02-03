@@ -23,7 +23,7 @@
           <TaskList>Workflow Tasks</TaskList>
           <TaskListGuid>{20282f23-9e1a-415c-bbf7-e00b3f3f0bcf}</TaskListGuid>
           <AutoAssociate>true</AutoAssociate>
-          <ManualStart>true</ManualStart>
+          <ManualStart>false</ManualStart>
           <ListURL>http://spf2010/sites/animus/Lists/admProcesy/AllItems.aspx</ListURL>
           <TargetList>admProcesy</TargetList>
           <TargetListGuid>{c4bab191-885d-4d15-a474-3ec0f6feca49}</TargetListGuid>
@@ -75,6 +75,48 @@
           <TargetListGuid>{a757bac9-6dc1-4ea3-aa50-8813fcd31495}</TargetListGuid>
           <StartOnCreate>false</StartOnCreate>
           <StartOnChange>false</StartOnChange>
+        </ProjectItemStore>
+        <ProjectItemStore Id="{e0951b82-3f42-4064-a9f2-9c9c0275ca4c}">
+          <DisplayName>tabZadaniaWF</DisplayName>
+          <HistoryList>Workflow History</HistoryList>
+          <HistoryListGuid>{14545afc-994d-4b9d-9af3-e34840669152}</HistoryListGuid>
+          <TaskList>Workflow Tasks</TaskList>
+          <TaskListGuid>{20282f23-9e1a-415c-bbf7-e00b3f3f0bcf}</TaskListGuid>
+          <AutoAssociate>true</AutoAssociate>
+          <ManualStart>false</ManualStart>
+          <ListURL>http://spf2010/sites/animus/Lists/tabZadania/AllItems.aspx</ListURL>
+          <TargetList>Zadania</TargetList>
+          <TargetListGuid>{89a33c3b-e8fe-4172-a233-8f6e4a87c9e8}</TargetListGuid>
+          <StartOnCreate>false</StartOnCreate>
+          <StartOnChange>false</StartOnChange>
+        </ProjectItemStore>
+        <ProjectItemStore Id="{d0abb762-a079-423d-955c-7e3dcbb2c865}">
+          <DisplayName>admProcesyWF</DisplayName>
+          <HistoryList>Workflow History</HistoryList>
+          <HistoryListGuid>{14545afc-994d-4b9d-9af3-e34840669152}</HistoryListGuid>
+          <TaskList>Workflow Tasks</TaskList>
+          <TaskListGuid>{20282f23-9e1a-415c-bbf7-e00b3f3f0bcf}</TaskListGuid>
+          <AutoAssociate>true</AutoAssociate>
+          <ManualStart>false</ManualStart>
+          <ListURL>http://spf2010/sites/animus/Lists/admProcesy/AllItems.aspx</ListURL>
+          <TargetList>admProcesy</TargetList>
+          <TargetListGuid>{c4bab191-885d-4d15-a474-3ec0f6feca49}</TargetListGuid>
+          <StartOnCreate>false</StartOnCreate>
+          <StartOnChange>false</StartOnChange>
+        </ProjectItemStore>
+        <ProjectItemStore Id="{ba36556b-2a12-459c-923e-48e64cae837a}">
+          <ManualStart>false</ManualStart>
+          <StartOnChange>false</StartOnChange>
+          <StartOnCreate>false</StartOnCreate>
+          <DisplayName>Generuj formatki rozliczeniowe</DisplayName>
+          <HistoryList>Workflow History</HistoryList>
+          <HistoryListGuid>{14545afc-994d-4b9d-9af3-e34840669152}</HistoryListGuid>
+          <TaskList>Workflow Tasks</TaskList>
+          <TaskListGuid>{20282f23-9e1a-415c-bbf7-e00b3f3f0bcf}</TaskListGuid>
+          <AutoAssociate>true</AutoAssociate>
+          <ListURL>http://spf2010/sites/animus/Lists/admProcesy/AllItems.aspx</ListURL>
+          <TargetList>admProcesy</TargetList>
+          <TargetListGuid>{c4bab191-885d-4d15-a474-3ec0f6feca49}</TargetListGuid>
         </ProjectItemStore>
       </FlavorProperties>
     </VisualStudio>

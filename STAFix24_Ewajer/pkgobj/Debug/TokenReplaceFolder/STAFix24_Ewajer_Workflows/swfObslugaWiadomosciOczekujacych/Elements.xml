@@ -7,7 +7,7 @@ Name="[NAME]" ==> Name="MyWorkflow" -->
 <Elements xmlns="http://schemas.microsoft.com/sharepoint/">
   <Workflow
      Name="Obsługa wiadomości oczekujących"
-     Description="My SharePoint Workflow"
+     Description="Dla każdej wiadomości z kolejki wiadomości spełniającej kryteria wysyłki inicjuje procedurę ObsługaWiadomościWF"
      Id="37286101-2D91-4114-972A-D2C3CCB2F78C"
      CodeBesideClass="Workflows.swfObslugaWiadomosciOczekujacych.swfObslugaWiadomosciOczekujacych"
      CodeBesideAssembly="STAFix24.Ewajer.Workflows, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7c2016d13a1c5fef">

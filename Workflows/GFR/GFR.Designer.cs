@@ -26,34 +26,72 @@ namespace Workflows.GFR
         private void InitializeComponent()
         {
             this.CanModifyActivities = true;
-            System.Workflow.Activities.CodeCondition codecondition1 = new System.Workflow.Activities.CodeCondition();
-            System.Workflow.ComponentModel.ActivityBind activitybind2 = new System.Workflow.ComponentModel.ActivityBind();
-            System.Workflow.Runtime.CorrelationToken correlationtoken1 = new System.Workflow.Runtime.CorrelationToken();
             System.Workflow.ComponentModel.ActivityBind activitybind1 = new System.Workflow.ComponentModel.ActivityBind();
-            this.UpdatStatusZadania = new System.Workflow.Activities.CodeActivity();
+            System.Workflow.Activities.CodeCondition codecondition1 = new System.Workflow.Activities.CodeCondition();
+            System.Workflow.ComponentModel.ActivityBind activitybind3 = new System.Workflow.ComponentModel.ActivityBind();
+            System.Workflow.Runtime.CorrelationToken correlationtoken1 = new System.Workflow.Runtime.CorrelationToken();
+            System.Workflow.ComponentModel.ActivityBind activitybind2 = new System.Workflow.ComponentModel.ActivityBind();
+            this.logToHistoryListActivity5 = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
+            this.UpdateStatus_Anulowane = new System.Workflow.Activities.CodeActivity();
+            this.logErrorMessage = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
+            this.ErrorHandler = new System.Workflow.Activities.CodeActivity();
             this.logToHistoryListActivity4 = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
+            this.UpdatStatusZadania = new System.Workflow.Activities.CodeActivity();
             this.Run_GFR_Create = new System.Workflow.Activities.CodeActivity();
             this.logToHistoryListActivity3 = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
+            this.faultHandlerActivity1 = new System.Workflow.ComponentModel.FaultHandlerActivity();
             this.CT_GFR = new System.Workflow.Activities.IfElseBranchActivity();
-            this.logToHistoryListActivity2 = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
+            this.cancellationHandlerActivity1 = new System.Workflow.ComponentModel.CancellationHandlerActivity();
+            this.faultHandlersActivity1 = new System.Workflow.ComponentModel.FaultHandlersActivity();
             this.ifCT_GFR = new System.Workflow.Activities.IfElseActivity();
-            this.logToHistoryListActivity1 = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
             this.onWorkflowActivated1 = new Microsoft.SharePoint.WorkflowActions.OnWorkflowActivated();
             // 
-            // UpdatStatusZadania
+            // logToHistoryListActivity5
             // 
-            this.UpdatStatusZadania.Name = "UpdatStatusZadania";
-            this.UpdatStatusZadania.ExecuteCode += new System.EventHandler(this.UpdatStatusZadania_ExecuteCode);
+            this.logToHistoryListActivity5.Duration = System.TimeSpan.Parse("-10675199.02:48:05.4775808");
+            this.logToHistoryListActivity5.EventId = Microsoft.SharePoint.Workflow.SPWorkflowHistoryEventType.WorkflowComment;
+            this.logToHistoryListActivity5.HistoryDescription = "Status";
+            this.logToHistoryListActivity5.HistoryOutcome = "Anulowany";
+            this.logToHistoryListActivity5.Name = "logToHistoryListActivity5";
+            this.logToHistoryListActivity5.OtherData = "";
+            this.logToHistoryListActivity5.UserId = -1;
+            // 
+            // UpdateStatus_Anulowane
+            // 
+            this.UpdateStatus_Anulowane.Name = "UpdateStatus_Anulowane";
+            this.UpdateStatus_Anulowane.ExecuteCode += new System.EventHandler(this.UpdateStatus_Anulowane_ExecuteCode);
+            // 
+            // logErrorMessage
+            // 
+            this.logErrorMessage.Duration = System.TimeSpan.Parse("-10675199.02:48:05.4775808");
+            this.logErrorMessage.EventId = Microsoft.SharePoint.Workflow.SPWorkflowHistoryEventType.WorkflowComment;
+            activitybind1.Name = "GFR";
+            activitybind1.Path = "logErrorMessage_HistoryDescription";
+            this.logErrorMessage.HistoryOutcome = "";
+            this.logErrorMessage.Name = "logErrorMessage";
+            this.logErrorMessage.OtherData = "";
+            this.logErrorMessage.UserId = -1;
+            this.logErrorMessage.SetBinding(Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity.HistoryDescriptionProperty, ((System.Workflow.ComponentModel.ActivityBind)(activitybind1)));
+            // 
+            // ErrorHandler
+            // 
+            this.ErrorHandler.Name = "ErrorHandler";
+            this.ErrorHandler.ExecuteCode += new System.EventHandler(this.ErrorHandler_ExecuteCode);
             // 
             // logToHistoryListActivity4
             // 
             this.logToHistoryListActivity4.Duration = System.TimeSpan.Parse("-10675199.02:48:05.4775808");
             this.logToHistoryListActivity4.EventId = Microsoft.SharePoint.Workflow.SPWorkflowHistoryEventType.WorkflowComment;
-            this.logToHistoryListActivity4.HistoryDescription = "";
-            this.logToHistoryListActivity4.HistoryOutcome = "Aktualizacja statusu zlecenia";
+            this.logToHistoryListActivity4.HistoryDescription = "Status";
+            this.logToHistoryListActivity4.HistoryOutcome = "Zakończony";
             this.logToHistoryListActivity4.Name = "logToHistoryListActivity4";
             this.logToHistoryListActivity4.OtherData = "";
             this.logToHistoryListActivity4.UserId = -1;
+            // 
+            // UpdatStatusZadania
+            // 
+            this.UpdatStatusZadania.Name = "UpdatStatusZadania";
+            this.UpdatStatusZadania.ExecuteCode += new System.EventHandler(this.UpdatStatusZadania_ExecuteCode);
             // 
             // Run_GFR_Create
             // 
@@ -64,48 +102,46 @@ namespace Workflows.GFR
             // 
             this.logToHistoryListActivity3.Duration = System.TimeSpan.Parse("-10675199.02:48:05.4775808");
             this.logToHistoryListActivity3.EventId = Microsoft.SharePoint.Workflow.SPWorkflowHistoryEventType.WorkflowComment;
-            this.logToHistoryListActivity3.HistoryDescription = "";
+            this.logToHistoryListActivity3.HistoryDescription = "Case";
             this.logToHistoryListActivity3.HistoryOutcome = "Generowanie zleceń generowania formatek";
             this.logToHistoryListActivity3.Name = "logToHistoryListActivity3";
             this.logToHistoryListActivity3.OtherData = "";
             this.logToHistoryListActivity3.UserId = -1;
             // 
+            // faultHandlerActivity1
+            // 
+            this.faultHandlerActivity1.Activities.Add(this.ErrorHandler);
+            this.faultHandlerActivity1.Activities.Add(this.logErrorMessage);
+            this.faultHandlerActivity1.Activities.Add(this.UpdateStatus_Anulowane);
+            this.faultHandlerActivity1.Activities.Add(this.logToHistoryListActivity5);
+            this.faultHandlerActivity1.FaultType = typeof(System.Exception);
+            this.faultHandlerActivity1.Name = "faultHandlerActivity1";
+            // 
             // CT_GFR
             // 
             this.CT_GFR.Activities.Add(this.logToHistoryListActivity3);
             this.CT_GFR.Activities.Add(this.Run_GFR_Create);
-            this.CT_GFR.Activities.Add(this.logToHistoryListActivity4);
             this.CT_GFR.Activities.Add(this.UpdatStatusZadania);
+            this.CT_GFR.Activities.Add(this.logToHistoryListActivity4);
             codecondition1.Condition += new System.EventHandler<System.Workflow.Activities.ConditionalEventArgs>(this.isCT_GFR);
             this.CT_GFR.Condition = codecondition1;
             this.CT_GFR.Name = "CT_GFR";
             // 
-            // logToHistoryListActivity2
+            // cancellationHandlerActivity1
             // 
-            this.logToHistoryListActivity2.Duration = System.TimeSpan.Parse("-10675199.02:48:05.4775808");
-            this.logToHistoryListActivity2.EventId = Microsoft.SharePoint.Workflow.SPWorkflowHistoryEventType.WorkflowComment;
-            this.logToHistoryListActivity2.HistoryDescription = "";
-            this.logToHistoryListActivity2.HistoryOutcome = "STOP";
-            this.logToHistoryListActivity2.Name = "logToHistoryListActivity2";
-            this.logToHistoryListActivity2.OtherData = "";
-            this.logToHistoryListActivity2.UserId = -1;
+            this.cancellationHandlerActivity1.Name = "cancellationHandlerActivity1";
+            // 
+            // faultHandlersActivity1
+            // 
+            this.faultHandlersActivity1.Activities.Add(this.faultHandlerActivity1);
+            this.faultHandlersActivity1.Name = "faultHandlersActivity1";
             // 
             // ifCT_GFR
             // 
             this.ifCT_GFR.Activities.Add(this.CT_GFR);
             this.ifCT_GFR.Name = "ifCT_GFR";
-            // 
-            // logToHistoryListActivity1
-            // 
-            this.logToHistoryListActivity1.Duration = System.TimeSpan.Parse("-10675199.02:48:05.4775808");
-            this.logToHistoryListActivity1.EventId = Microsoft.SharePoint.Workflow.SPWorkflowHistoryEventType.WorkflowComment;
-            this.logToHistoryListActivity1.HistoryDescription = "";
-            this.logToHistoryListActivity1.HistoryOutcome = "START";
-            this.logToHistoryListActivity1.Name = "logToHistoryListActivity1";
-            this.logToHistoryListActivity1.OtherData = "";
-            this.logToHistoryListActivity1.UserId = -1;
-            activitybind2.Name = "GFR";
-            activitybind2.Path = "workflowId";
+            activitybind3.Name = "GFR";
+            activitybind3.Path = "workflowId";
             // 
             // onWorkflowActivated1
             // 
@@ -114,18 +150,18 @@ namespace Workflows.GFR
             this.onWorkflowActivated1.CorrelationToken = correlationtoken1;
             this.onWorkflowActivated1.EventName = "OnWorkflowActivated";
             this.onWorkflowActivated1.Name = "onWorkflowActivated1";
-            activitybind1.Name = "GFR";
-            activitybind1.Path = "workflowProperties";
+            activitybind2.Name = "GFR";
+            activitybind2.Path = "workflowProperties";
             this.onWorkflowActivated1.Invoked += new System.EventHandler<System.Workflow.Activities.ExternalDataEventArgs>(this.onWorkflowActivated1_Invoked);
-            this.onWorkflowActivated1.SetBinding(Microsoft.SharePoint.WorkflowActions.OnWorkflowActivated.WorkflowIdProperty, ((System.Workflow.ComponentModel.ActivityBind)(activitybind2)));
-            this.onWorkflowActivated1.SetBinding(Microsoft.SharePoint.WorkflowActions.OnWorkflowActivated.WorkflowPropertiesProperty, ((System.Workflow.ComponentModel.ActivityBind)(activitybind1)));
+            this.onWorkflowActivated1.SetBinding(Microsoft.SharePoint.WorkflowActions.OnWorkflowActivated.WorkflowIdProperty, ((System.Workflow.ComponentModel.ActivityBind)(activitybind3)));
+            this.onWorkflowActivated1.SetBinding(Microsoft.SharePoint.WorkflowActions.OnWorkflowActivated.WorkflowPropertiesProperty, ((System.Workflow.ComponentModel.ActivityBind)(activitybind2)));
             // 
             // GFR
             // 
             this.Activities.Add(this.onWorkflowActivated1);
-            this.Activities.Add(this.logToHistoryListActivity1);
             this.Activities.Add(this.ifCT_GFR);
-            this.Activities.Add(this.logToHistoryListActivity2);
+            this.Activities.Add(this.faultHandlersActivity1);
+            this.Activities.Add(this.cancellationHandlerActivity1);
             this.Name = "GFR";
             this.CanModifyActivities = false;
 
@@ -133,13 +169,23 @@ namespace Workflows.GFR
 
         #endregion
 
+        private CancellationHandlerActivity cancellationHandlerActivity1;
+
+        private FaultHandlersActivity faultHandlersActivity1;
+
+        private Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity logToHistoryListActivity5;
+
+        private CodeActivity UpdateStatus_Anulowane;
+
+        private Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity logErrorMessage;
+
+        private CodeActivity ErrorHandler;
+
+        private FaultHandlerActivity faultHandlerActivity1;
+
         private Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity logToHistoryListActivity4;
 
         private Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity logToHistoryListActivity3;
-
-        private Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity logToHistoryListActivity2;
-
-        private Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity logToHistoryListActivity1;
 
         private CodeActivity UpdatStatusZadania;
 
@@ -150,6 +196,15 @@ namespace Workflows.GFR
         private CodeActivity Run_GFR_Create;
 
         private Microsoft.SharePoint.WorkflowActions.OnWorkflowActivated onWorkflowActivated1;
+
+
+
+
+
+
+
+
+
 
 
 

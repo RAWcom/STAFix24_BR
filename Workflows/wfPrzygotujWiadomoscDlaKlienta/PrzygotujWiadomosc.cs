@@ -354,20 +354,26 @@ namespace Workflows.PrzygotujWiadomosc
                         break;
                 }
 
+                //oznaczenie podatków
+                //http://www.przepisy.gofin.pl/przepisy,3,23,59,2229,67137,20121221,symbole-formularzatytulu-platnosci.html
+
                 string fop = BLL.Tools.Get_Text(item, "colFormaOpodatkowaniaPD");
                 switch (fop)
                 {
                     case "Zasady ogólne":
-                        ReplaceString(sbPD, "colFormaOpodatkowaniaPD", "PIT-5");
+                        ReplaceString(sbPD, "colFormaOpodatkowaniaPD", "PIT");
                         break;
                     case "Podatek liniowy":
-                        ReplaceString(sbPD, "colFormaOpodatkowaniaPD", "PIT-5L");
+                        ReplaceString(sbPD, "colFormaOpodatkowaniaPD", "PPL");
                         break;
                     case "Karta podatkowa":
-                        ReplaceString(sbPD, "colFormaOpodatkowaniaPD", "PPE");
+                        ReplaceString(sbPD, "colFormaOpodatkowaniaPD", "KP");
                         break;
                     case "Ryczałt":
-                        ReplaceString(sbPD, "colFormaOpodatkowaniaPD", "CIT-8");
+                        ReplaceString(sbPD, "colFormaOpodatkowaniaPD", "PPE");
+                        break;
+                    case "CIT":
+                        ReplaceString(sbPD, "colFormaOpodatkowaniaPD", "CIT");
                         break;
                     default:
                         ReplaceString(sbPD, "colFormaOpodatkowaniaPD", string.Empty);

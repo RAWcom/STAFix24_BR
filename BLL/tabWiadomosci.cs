@@ -487,7 +487,7 @@ namespace BLL
             SPList list = web.Lists.TryGetList(targetList);
 
             return list.Items.Cast<SPListItem>()
-                .Where(i => (bool)i["colCzyWyslana"] != true)
+                .Where(i => BLL.Tools.Get_Flag(i,"colCzyWyslana").Equals(!true))
                 .Where(i => i["colPlanowanaDataNadania"] == null
                     || (i["colPlanowanaDataNadania"] != null
                        && (DateTime)i["colPlanowanaDataNadania"] <= DateTime.Now))

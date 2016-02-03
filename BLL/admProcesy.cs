@@ -24,5 +24,10 @@ namespace BLL
                 //            & BLL.Tools.Get_Text(i, "enumStatusZlecenia").Equals(status))
                 .ToArray();
         }
+
+        public static SPListItem GetItemById(SPWeb web, int itemId)
+        {
+            return web.Lists.TryGetList(targetList).GetItemById(itemId);
+        }
     }
 }

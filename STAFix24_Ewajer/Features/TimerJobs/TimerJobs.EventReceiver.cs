@@ -6,31 +6,29 @@ using Microsoft.SharePoint.Security;
 
 namespace Stafix.Features.TimerJobs
 {
-
-        [Guid("E6892FD1-BC1A-49D8-8229-45C461243B80")]
-        public class TimerJob_ObslugaWiadomosciEventReceiver : SPFeatureReceiver
+    [Guid("9a06b41b-b816-475f-a1a3-537767f9944d")]
+    public class TimerJobsEventReceiver : SPFeatureReceiver
+    {
+        public override void FeatureActivated(SPFeatureReceiverProperties properties)
         {
-            public override void FeatureActivated(SPFeatureReceiverProperties properties)
-            {
-                SPSite site = properties.Feature.Parent as SPSite;
+            SPSite site = properties.Feature.Parent as SPSite;
 
-                try
-                {
-                    Stafix.TimerJobs.ObslugaWiadomosciTJ.CreateTimerJob(site);
-                    //Stafix.TimerJobs.PrzygotowanieWiadomosciTJ.CreateTimerJob(site);
-                }
-                catch (Exception ex)
-                {
-                    ElasticEmail.EmailGenerator.ReportError(ex, site.Url);
-                }
+            try
+            {
+                Stafix.TimerJobs.ObslugaWiadomosciTJ.CreateTimerJob(site);
+                //Stafix.TimerJobs.PrzygotowanieWiadomosciTJ.CreateTimerJob(site);
             }
-
-            public override void FeatureDeactivating(SPFeatureReceiverProperties properties)
+            catch (Exception ex)
             {
-                var site = properties.Feature.Parent as SPSite;
-                Stafix.TimerJobs.ObslugaWiadomosciTJ.DelteTimerJob(site);
-                Stafix.TimerJobs.PrzygotowanieWiadomosciTJ.DelteTimerJob(site);
+                ElasticEmail.EmailGenerator.ReportError(ex, site.Url);
             }
         }
-  
+
+        public override void FeatureDeactivating(SPFeatureReceiverProperties properties)
+        {
+            var site = properties.Feature.Parent as SPSite;
+            Stafix.TimerJobs.ObslugaWiadomosciTJ.DelteTimerJob(site);
+            Stafix.TimerJobs.PrzygotowanieWiadomosciTJ.DelteTimerJob(site);
+        }
+    }
 }

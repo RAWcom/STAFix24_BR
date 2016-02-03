@@ -67,6 +67,7 @@ namespace Workflows.swfObslugaWiadomosciOczekujacych
         public String logWorkflow_HistoryOutcome = default(System.String);
         public String logErrorMessage_HistoryDescription = default(System.String);
         public String logErrorMessage_HistoryOutcome = default(System.String);
+        private string _ZAKONCZONY = "Zakończony";
 
         private void cmdErrorHandler_ExecuteCode(object sender, EventArgs e)
         {
@@ -84,6 +85,23 @@ namespace Workflows.swfObslugaWiadomosciOczekujacych
                 ElasticEmail.EmailGenerator.ReportErrorFromWorkflow(workflowProperties, fa.Fault.Message, fa.Fault.StackTrace);
             }
 
+        }
+
+        private void UpdateRequestorStatus_ExecuteCode(object sender, EventArgs e)
+        {
+            int procesItemId = int.Parse(workflowProperties.InitiationData.ToString());
+
+            if (procesItemId > 0)
+            {
+                Debug.Write("Element do akutalizacji: " + procesItemId.ToString());
+
+                SPListItem o = BLL.admProcesy.GetItemById(workflowProperties.Web, procesItemId);
+                if (o != null)
+                {
+                    BLL.Tools.Set_Text(o, "enumStatusZlecenia", _ZAKONCZONY);
+                    o.SystemUpdate();
+                }
+            }
         }
 
 

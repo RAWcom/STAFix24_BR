@@ -15,5 +15,6 @@
     <FeatureManifest Location="STAFix24_Ewajer_Workflows\Feature.xml" />
     <FeatureManifest Location="STAFix24_Ewajer_EventReceivers\Feature.xml" />
     <FeatureManifest Location="STAFix24_Ewajer_CustomActions\Feature.xml" />
+    <FeatureManifest Location="STAFix24_Ewajer_TimerJobs\Feature.xml" />
   </FeatureManifests>
 </Solution>

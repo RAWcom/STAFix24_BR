@@ -70,7 +70,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="tabSzablonyWiadomosci\tabSzablonyWiadomosci.cs" />
-    <Compile Include="tabZadania\tabZadania.cs" />
+    <Compile Include="tabZadania\tabZadania.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="admProcesy\SharePointProjectItem.spdata">
@@ -94,7 +96,7 @@
       <SharePointProjectItemId>{03c8891f-1cc7-45ba-abeb-de4ea8ce398a}</SharePointProjectItemId>
     </None>
     <None Include="tabZadania\SharePointProjectItem.spdata">
-      <SharePointProjectItemId>{3750d70c-be77-4fbc-9462-425f9744c743}</SharePointProjectItemId>
+      <SharePointProjectItemId>{1ab64a14-79b3-4f4e-b3a4-82b73f2363e4}</SharePointProjectItemId>
     </None>
   </ItemGroup>
   <ItemGroup>

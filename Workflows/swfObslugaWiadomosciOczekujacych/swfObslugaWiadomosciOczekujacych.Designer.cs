@@ -41,7 +41,7 @@ namespace Workflows.swfObslugaWiadomosciOczekujacych
             this.faultHandlerActivity1 = new System.Workflow.ComponentModel.FaultHandlerActivity();
             this.ObsługaPojedynczejWiadomości = new System.Workflow.Activities.SequenceActivity();
             this.faultHandlersActivity1 = new System.Workflow.ComponentModel.FaultHandlersActivity();
-            this.logEnd = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
+            this.UpdateRequestorStatus = new System.Workflow.Activities.CodeActivity();
             this.whileActivity1 = new System.Workflow.Activities.WhileActivity();
             this.logSelected = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
             this.Select_ListaWiadomosciOczekujacych = new System.Workflow.Activities.CodeActivity();
@@ -101,15 +101,10 @@ namespace Workflows.swfObslugaWiadomosciOczekujacych
             this.faultHandlersActivity1.Activities.Add(this.faultHandlerActivity1);
             this.faultHandlersActivity1.Name = "faultHandlersActivity1";
             // 
-            // logEnd
+            // UpdateRequestorStatus
             // 
-            this.logEnd.Duration = System.TimeSpan.Parse("-10675199.02:48:05.4775808");
-            this.logEnd.EventId = Microsoft.SharePoint.Workflow.SPWorkflowHistoryEventType.WorkflowComment;
-            this.logEnd.HistoryDescription = "Zakończony";
-            this.logEnd.HistoryOutcome = "";
-            this.logEnd.Name = "logEnd";
-            this.logEnd.OtherData = "";
-            this.logEnd.UserId = -1;
+            this.UpdateRequestorStatus.Name = "UpdateRequestorStatus";
+            this.UpdateRequestorStatus.ExecuteCode += new System.EventHandler(this.UpdateRequestorStatus_ExecuteCode);
             // 
             // whileActivity1
             // 
@@ -156,7 +151,7 @@ namespace Workflows.swfObslugaWiadomosciOczekujacych
             this.Activities.Add(this.Select_ListaWiadomosciOczekujacych);
             this.Activities.Add(this.logSelected);
             this.Activities.Add(this.whileActivity1);
-            this.Activities.Add(this.logEnd);
+            this.Activities.Add(this.UpdateRequestorStatus);
             this.Activities.Add(this.faultHandlersActivity1);
             this.Name = "swfObslugaWiadomosciOczekujacych";
             this.CanModifyActivities = false;
@@ -165,13 +160,13 @@ namespace Workflows.swfObslugaWiadomosciOczekujacych
 
         #endregion
 
+        private CodeActivity UpdateRequestorStatus;
+
         private Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity logErrorMessage;
 
         private CodeActivity cmdErrorHandler;
 
         private FaultHandlerActivity faultHandlerActivity1;
-
-        private Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity logEnd;
 
         private FaultHandlersActivity faultHandlersActivity1;
 
@@ -188,6 +183,7 @@ namespace Workflows.swfObslugaWiadomosciOczekujacych
         private CodeActivity Select_ListaWiadomosciOczekujacych;
 
         private Microsoft.SharePoint.WorkflowActions.OnWorkflowActivated onWorkflowActivated1;
+
 
 
 
