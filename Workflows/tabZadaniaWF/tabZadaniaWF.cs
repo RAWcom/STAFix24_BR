@@ -949,7 +949,7 @@ namespace Workflows.tabZadaniaWF
             if (item.ContentType.Name.Equals("Wiadomość z szablonu")
                 | item.ContentType.Name.Equals("Wiadomość z ręki")
                 | item.ContentType.Name.Equals("Wiadomość grupowa z szablonu")
-                | item.ContentType.Name.Equals("Wiadomość grupowa ")) e.Result = true;
+                | item.ContentType.Name.Equals("Wiadomość grupowa")) e.Result = true;
         }
     }
 }

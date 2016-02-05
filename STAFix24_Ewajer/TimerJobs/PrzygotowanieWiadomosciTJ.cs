@@ -57,7 +57,7 @@ namespace Stafix.TimerJobs
             {
                 try
                 {
-                    BLL.Workflows.StartSiteWorkflow(site, "Obsługa kart kontrolnych");
+                    BLL.Workflows.StartSiteWorkflow(site, "Obsługa kart kontrolnych", null);
                 }
                 catch (Exception ex)
                 {

@@ -63,7 +63,19 @@ namespace Stafix.TimerJobs
             {
                 try
                 {
-                    BLL.Workflows.StartSiteWorkflow(site, "Obsługa wiadomości oczekujących");
+                    //nie chce zadziałać na serwerze produkcyjnym
+                    BLL.Workflows.StartSiteWorkflow(site, "Obsługa wiadomości oczekujących", "-1");
+
+                    //using (SPWeb web = site.RootWeb)
+                    //{
+                    //    SPList list = web.Lists.TryGetList("admProcesy");
+                    //    if (list!=null)
+                    //    {
+                    //        SPListItem item = list.AddItem();
+                    //        BLL.Tools.Set_Text(item, "ContentType", "Obsługa wiadomości");
+                    //        item.Update();
+                    //    }
+                    //}
                 }
                 catch (Exception ex)
                 {

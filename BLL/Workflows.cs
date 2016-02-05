@@ -47,10 +47,6 @@ namespace BLL
             { }
         }
 
-        public static void StartSiteWorkflow(SPSite site, string workflowName)
-        {
-            StartSiteWorkflow(site, workflowName, string.Empty);
-        }
 
         public static void StartSiteWorkflow(SPSite site, string workflowName, string initParameters)
         {
@@ -59,9 +55,15 @@ namespace BLL
                 //find workflow to start
                 var assoc = web.WorkflowAssociations.GetAssociationByName(workflowName, CultureInfo.InvariantCulture);
 
-                //this is the call to start the workflow
-                var result = site.WorkflowManager.StartWorkflow(null, assoc, initParameters , SPWorkflowRunOptions.Synchronous);
+                if (string.IsNullOrEmpty(initParameters)) initParameters = assoc.AssociationData;
 
+                //this is the call to start the workflow
+                var result = site.WorkflowManager.StartWorkflow(null, assoc, initParameters.ToString() , SPWorkflowRunOptions.SynchronousAllowPostpone);
+
+                if (!result.InternalState.ToString().Equals("Completed"))
+                {
+                    ElasticEmail.EmailGenerator.SendMail(string.Format(@"WorkflowManager({0})", site.RootWeb.ToString()), "InternalState=" + result.InternalState.ToString());
+                }
             }
         }
 

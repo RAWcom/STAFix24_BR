@@ -263,6 +263,10 @@ namespace EventReceivers.tabKlienci
                             case "Spółka z o.o.":
                                 BLL.Tools.Assign_Service(ref item, "selSewisy", "FP-SZOO");
                                 break;
+                            case "Spółka z o.o. Spółka komandytowa":
+                                BLL.Tools.Assign_Service(ref item, "selSewisy", "FP-SZOO");
+                                BLL.Tools.Assign_Service(ref item, "selSewisy", "FP-SK");
+                                break;
                             case "Spółka cywilna":
                                 BLL.Tools.Assign_Service(ref item, "selSewisy", "FP-SC");
                                 break;
@@ -278,7 +282,6 @@ namespace EventReceivers.tabKlienci
                             case "Spółka partnerska":
                                 BLL.Tools.Assign_Service(ref item, "selSewisy", "FP-SP");
                                 break;
-
                             default:
                                 break;
                         }
