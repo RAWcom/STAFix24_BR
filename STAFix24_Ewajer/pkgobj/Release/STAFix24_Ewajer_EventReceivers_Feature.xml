@@ -6,5 +6,6 @@
     <ElementManifest Location="admProcesy\Elements.xml" />
     <ElementManifest Location="tabSzablonyWiadomosci\Elements.xml" />
     <ElementManifest Location="tabZadania\Elements.xml" />
+    <ElementManifest Location="dicRozliczenia\Elements.xml" />
   </ElementManifests>
 </Feature>
