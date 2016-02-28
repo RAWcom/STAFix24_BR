@@ -859,6 +859,8 @@ namespace BLL
             }
             BLL.Tools.Set_Date(newItem, "colTerminRealizacji", terminRealizacji);
 
+            BLL.Tools.Set_Text(newItem, "enumRozliczenieVAT", rozliczenieVAT);
+
             BLL.Tools.Set_Text(newItem, "enumStatusZadania", "Nowe");
 
             newItem.Update();

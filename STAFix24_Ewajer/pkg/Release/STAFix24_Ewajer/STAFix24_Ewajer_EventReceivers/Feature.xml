@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Feature xmlns="http://schemas.microsoft.com/sharepoint/" Title="STAFix24_Ewajer Event Receivers" Id="8c972065-38dd-46fc-bc1f-2a78bc0f3ac1" Scope="Web">
+<Feature xmlns="http://schemas.microsoft.com/sharepoint/" Id="8c972065-38dd-46fc-bc1f-2a78bc0f3ac1" Scope="Web" Title="STAFix24_Ewajer Event Receivers">
   <ElementManifests>
     <ElementManifest Location="tabKlienci\Elements.xml" />
     <ElementManifest Location="dicUrzedySkarbowe\Elements.xml" />

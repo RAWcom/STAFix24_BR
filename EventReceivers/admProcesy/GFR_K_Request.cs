@@ -35,10 +35,10 @@ namespace EventReceivers.admProcesy
                         //    PDS_Forms.Create_PDS_Form(item.Web, okresId, klientItem, iok);
                         if (mask.StartsWith("VAT-") || string.IsNullOrEmpty(mask))
                             VAT_Forms.Create_VAT_Form(item.Web, okresId, klientItem, iok);
-                        if (mask.Equals("RBR") || string.IsNullOrEmpty(mask))
-                            RBR_Forms.Create_RBR_Form(item.Web, okresId, klientItem, iok);
-                        if (mask.Equals("RB") || string.IsNullOrEmpty(mask))
-                            RB_Forms.Create_RB_Form(item.Web, okresId, klientItem, iok);
+                        //if (mask.Equals("RBR") || string.IsNullOrEmpty(mask))
+                        //    RBR_Forms.Create_RBR_Form(item.Web, okresId, klientItem, iok);
+                        //if (mask.Equals("RB") || string.IsNullOrEmpty(mask))
+                        //    RB_Forms.Create_RB_Form(item.Web, okresId, klientItem, iok);
                         break;
                     case "Firma zewnętrzna":
                         if (mask.StartsWith("PD-") || string.IsNullOrEmpty(mask))

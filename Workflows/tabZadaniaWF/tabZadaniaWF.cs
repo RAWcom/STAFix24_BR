@@ -518,7 +518,15 @@ namespace Workflows.tabZadaniaWF
                         if (BLL.Tools.Get_Flag(item, "colVAT_eDeklaracja"))
                         {
                             // wygeneruj zadanie KKDVAT
-                            BLL.tabZadania.Create_KKDVAT(item.Web, item);
+                            try
+                            {
+                                BLL.tabZadania.Create_KKDVAT(item.Web, item);
+                            }
+                            catch (Exception ex)
+                            {
+                                ElasticEmail.EmailGenerator.ReportError(ex, item.Web.Url.ToString());
+                            }
+                            
                         }
                     }
                 }
