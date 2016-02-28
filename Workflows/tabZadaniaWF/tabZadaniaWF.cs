@@ -511,6 +511,16 @@ namespace Workflows.tabZadaniaWF
                     Update_StatusZadania(item, cmd);
 
                     BLL.tabKartyKontrolne.Update_VAT_Data(item);
+
+                    if (cmd.Equals(_CMD_ZATWIERDZ_I_ZAKONCZ)
+                        || cmd.Equals(_CMD_ZATWIERDZ_I_WYSLIJ))
+                    {
+                        if (BLL.Tools.Get_Flag(item, "colVAT_eDeklaracja"))
+                        {
+                            // wygeneruj zadanie KKDVAT
+                            BLL.tabZadania.Create_KKDVAT(item.Web, item);
+                        }
+                    }
                 }
             }
             else
@@ -537,10 +547,6 @@ namespace Workflows.tabZadaniaWF
                         errLog.AppendLine("Nieprawidłowa wartość do zapłaty");
                         result = false;
                     }
-
-
-
-
 
                     break;
                 case "Do przeniesienia":
@@ -786,7 +792,15 @@ namespace Workflows.tabZadaniaWF
                         break;
                     default:
                         //przypisz procedurę na podstawie tematu
-                        procId = BLL.tabProcedury.Ensure(item.Web, item.Title, false);
+                        if (string.IsNullOrEmpty(item.Title))
+                        {
+                            BLL.Tools.Set_Text(item, "Title", ": " + item.ContentType.Name);
+                            procId = BLL.tabProcedury.Ensure(item.Web, item.Title, true);
+                        }
+                        else
+                        {
+                            procId = BLL.tabProcedury.Ensure(item.Web, item.Title, false);
+                        }
                         break;
                 }
 
@@ -919,6 +933,10 @@ namespace Workflows.tabZadaniaWF
                 case "Zadanie":
                     Manage_Zadanie(item);
                     break;
+                default:
+                    Manage_Zadanie(item);
+                    break;
+
             }
         }
 

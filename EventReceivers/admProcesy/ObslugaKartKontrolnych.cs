@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.SharePoint;
+using Microsoft.SharePoint.Workflow;
+using System.Diagnostics;
 
 namespace EventReceivers.admProcesy
 {
@@ -36,7 +38,8 @@ namespace EventReceivers.admProcesy
                 .ToList()
                 .ForEach(i =>
                 {
-                    BLL.Workflows.StartWorkflow(i, "Przygotuj wiadomość dla klienta");
+                    SPWorkflow wf = BLL.Workflows.StartWorkflow(i, "Przygotuj wiadomość dla klienta");
+                    Debug.WriteLine("StartWorkflow: Przygotuj wiadomość dla klienta " + wf.InternalState.ToString());
                     BLL.Logger.LogEvent(BLL.Tools.Get_LookupValue(i, "selKlient").ToString(), i.ID.ToString());
                 });
         }

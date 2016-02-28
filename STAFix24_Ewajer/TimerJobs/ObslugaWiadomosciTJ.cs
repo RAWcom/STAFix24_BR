@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
+using System.Diagnostics;
+using Microsoft.SharePoint.Workflow;
 
 namespace Stafix.TimerJobs
 {
@@ -64,18 +66,19 @@ namespace Stafix.TimerJobs
                 try
                 {
                     //nie chce zadziałać na serwerze produkcyjnym
-                    BLL.Workflows.StartSiteWorkflow(site, "Obsługa wiadomości oczekujących", "-1");
+                    SPWorkflow wf = BLL.Workflows.StartSiteWorkflow(site, "Obsługa wiadomości oczekujących",null);
+                    Debug.WriteLine("StartSiteWorkflow: Obsługa wiadomości oczekujących " + wf.InternalState.ToString());
 
                     //using (SPWeb web = site.RootWeb)
                     //{
                     //    SPList list = web.Lists.TryGetList("admProcesy");
-                    //    if (list!=null)
+                    //    if (list != null)
                     //    {
                     //        SPListItem item = list.AddItem();
                     //        BLL.Tools.Set_Text(item, "ContentType", "Obsługa wiadomości");
                     //        item.Update();
                     //    }
-                    //}
+                    //}   niew wywołuje zdarzenia obsługi procesu.
                 }
                 catch (Exception ex)
                 {

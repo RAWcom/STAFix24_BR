@@ -52,7 +52,8 @@ namespace Workflows.swfObslugaWiadomosciOczekujacych
         {
             item = myEnum.Current as SPListItem;
 
-            BLL.Workflows.StartWorkflow(item, "Obsługa wiadomości");
+            SPWorkflow wf = BLL.Workflows.StartWorkflow(item, "Obsługa wiadomości");
+            Debug.WriteLine("StartWorkflow: Obsługa wiadomości " + wf.InternalState.ToString());
 
             logSelected_HistoryOutcome = item.ID.ToString();
 
@@ -113,7 +114,7 @@ namespace Workflows.swfObslugaWiadomosciOczekujacych
                 }
                 catch (Exception ex)
                 {
-                    
+
                     ElasticEmail.EmailGenerator.ReportError(ex, string.Format("workflowPorperties.InitiationData={0}", workflowProperties.InitiationData));
                 }
 
@@ -133,7 +134,7 @@ namespace Workflows.swfObslugaWiadomosciOczekujacych
 
         private void hasInitParamsNotNull(object sender, ConditionalEventArgs e)
         {
-            if (workflowProperties.InitiationData != null) e.Result = true;
+            if (!string.IsNullOrEmpty(workflowProperties.InitiationData)) e.Result = true;
         }
 
         public String msgSubject = default(System.String);
@@ -177,6 +178,11 @@ namespace Workflows.swfObslugaWiadomosciOczekujacych
                         BLL.Tools.Get_LookupValue(item, "selKlient_NazwaSkrocona"),
                         item.Title);
             }
+        }
+
+        private void sendEmail2_MethodInvoking(object sender, EventArgs e)
+        {
+            msgTo = "stafix24@hotmail.com";
         }
 
 

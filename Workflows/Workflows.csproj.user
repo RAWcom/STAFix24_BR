@@ -22,7 +22,7 @@
           <HistoryListGuid>{14545afc-994d-4b9d-9af3-e34840669152}</HistoryListGuid>
           <TaskList>Workflow Tasks</TaskList>
           <TaskListGuid>{20282f23-9e1a-415c-bbf7-e00b3f3f0bcf}</TaskListGuid>
-          <AutoAssociate>true</AutoAssociate>
+          <AutoAssociate>false</AutoAssociate>
           <ManualStart>false</ManualStart>
           <ListURL>http://spf2010/sites/animus/Lists/admProcesy/AllItems.aspx</ListURL>
           <TargetList>admProcesy</TargetList>
@@ -36,7 +36,7 @@
           <HistoryListGuid>{14545afc-994d-4b9d-9af3-e34840669152}</HistoryListGuid>
           <TaskList>Workflow Tasks</TaskList>
           <TaskListGuid>{20282f23-9e1a-415c-bbf7-e00b3f3f0bcf}</TaskListGuid>
-          <AutoAssociate>true</AutoAssociate>
+          <AutoAssociate>false</AutoAssociate>
           <ManualStart>true</ManualStart>
           <ListURL>http://spf2010/sites/animus/Lists/tabKartyKontrolne/Informacja%20o%20wysykach.aspx</ListURL>
           <TargetList>Karty kontrolne</TargetList>
@@ -68,7 +68,7 @@
           <HistoryListGuid>{14545afc-994d-4b9d-9af3-e34840669152}</HistoryListGuid>
           <TaskList>Workflow Tasks</TaskList>
           <TaskListGuid>{20282f23-9e1a-415c-bbf7-e00b3f3f0bcf}</TaskListGuid>
-          <AutoAssociate>true</AutoAssociate>
+          <AutoAssociate>false</AutoAssociate>
           <ManualStart>true</ManualStart>
           <ListURL>http://spf2010/sites/animus/Lists/tabWiadomosci/Kolejka%20wiadomoci.aspx</ListURL>
           <TargetList>Wiadomości</TargetList>
@@ -82,7 +82,7 @@
           <HistoryListGuid>{14545afc-994d-4b9d-9af3-e34840669152}</HistoryListGuid>
           <TaskList>Workflow Tasks</TaskList>
           <TaskListGuid>{20282f23-9e1a-415c-bbf7-e00b3f3f0bcf}</TaskListGuid>
-          <AutoAssociate>true</AutoAssociate>
+          <AutoAssociate>false</AutoAssociate>
           <ManualStart>false</ManualStart>
           <ListURL>http://spf2010/sites/animus/Lists/tabZadania/AllItems.aspx</ListURL>
           <TargetList>Zadania</TargetList>
@@ -96,7 +96,7 @@
           <HistoryListGuid>{14545afc-994d-4b9d-9af3-e34840669152}</HistoryListGuid>
           <TaskList>Workflow Tasks</TaskList>
           <TaskListGuid>{20282f23-9e1a-415c-bbf7-e00b3f3f0bcf}</TaskListGuid>
-          <AutoAssociate>true</AutoAssociate>
+          <AutoAssociate>false</AutoAssociate>
           <ManualStart>false</ManualStart>
           <ListURL>http://spf2010/sites/animus/Lists/admProcesy/AllItems.aspx</ListURL>
           <TargetList>admProcesy</TargetList>
@@ -113,7 +113,7 @@
           <HistoryListGuid>{14545afc-994d-4b9d-9af3-e34840669152}</HistoryListGuid>
           <TaskList>Workflow Tasks</TaskList>
           <TaskListGuid>{20282f23-9e1a-415c-bbf7-e00b3f3f0bcf}</TaskListGuid>
-          <AutoAssociate>true</AutoAssociate>
+          <AutoAssociate>false</AutoAssociate>
           <ListURL>http://spf2010/sites/animus/Lists/admProcesy/AllItems.aspx</ListURL>
           <TargetList>admProcesy</TargetList>
           <TargetListGuid>{c4bab191-885d-4d15-a474-3ec0f6feca49}</TargetListGuid>

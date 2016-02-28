@@ -29,23 +29,28 @@ namespace Workflows.swfObslugaWiadomosciOczekujacych
             System.Workflow.ComponentModel.ActivityBind activitybind1 = new System.Workflow.ComponentModel.ActivityBind();
             System.Workflow.ComponentModel.ActivityBind activitybind2 = new System.Workflow.ComponentModel.ActivityBind();
             System.Workflow.ComponentModel.ActivityBind activitybind3 = new System.Workflow.ComponentModel.ActivityBind();
-            System.Workflow.Runtime.CorrelationToken correlationtoken1 = new System.Workflow.Runtime.CorrelationToken();
             System.Workflow.ComponentModel.ActivityBind activitybind4 = new System.Workflow.ComponentModel.ActivityBind();
+            System.Workflow.Runtime.CorrelationToken correlationtoken1 = new System.Workflow.Runtime.CorrelationToken();
             System.Workflow.ComponentModel.ActivityBind activitybind5 = new System.Workflow.ComponentModel.ActivityBind();
             System.Workflow.ComponentModel.ActivityBind activitybind6 = new System.Workflow.ComponentModel.ActivityBind();
             System.Workflow.ComponentModel.ActivityBind activitybind7 = new System.Workflow.ComponentModel.ActivityBind();
+            System.Workflow.ComponentModel.ActivityBind activitybind8 = new System.Workflow.ComponentModel.ActivityBind();
+            System.Workflow.ComponentModel.ActivityBind activitybind9 = new System.Workflow.ComponentModel.ActivityBind();
+            System.Workflow.ComponentModel.ActivityBind activitybind10 = new System.Workflow.ComponentModel.ActivityBind();
             System.Workflow.Activities.CodeCondition codecondition1 = new System.Workflow.Activities.CodeCondition();
             System.Workflow.Activities.CodeCondition codecondition2 = new System.Workflow.Activities.CodeCondition();
             System.Workflow.Activities.CodeCondition codecondition3 = new System.Workflow.Activities.CodeCondition();
-            System.Workflow.ComponentModel.ActivityBind activitybind8 = new System.Workflow.ComponentModel.ActivityBind();
-            System.Workflow.ComponentModel.ActivityBind activitybind10 = new System.Workflow.ComponentModel.ActivityBind();
-            System.Workflow.ComponentModel.ActivityBind activitybind9 = new System.Workflow.ComponentModel.ActivityBind();
+            System.Workflow.ComponentModel.ActivityBind activitybind11 = new System.Workflow.ComponentModel.ActivityBind();
+            System.Workflow.ComponentModel.ActivityBind activitybind13 = new System.Workflow.ComponentModel.ActivityBind();
+            System.Workflow.ComponentModel.ActivityBind activitybind12 = new System.Workflow.ComponentModel.ActivityBind();
             this.Update_Request_Canceled = new System.Workflow.Activities.CodeActivity();
             this.logErrorMessage = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
             this.cmdErrorHandler = new System.Workflow.Activities.CodeActivity();
             this.logReportSent = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
+            this.logMsgTo2 = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
             this.sendEmail2 = new Microsoft.SharePoint.WorkflowActions.SendEmail();
             this.logEmailSent = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
+            this.logMsgTo = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
             this.sendEmail1 = new Microsoft.SharePoint.WorkflowActions.SendEmail();
             this.logRequestUpated = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
             this.Update_Request_Completed = new System.Workflow.Activities.CodeActivity();
@@ -101,11 +106,23 @@ namespace Workflows.swfObslugaWiadomosciOczekujacych
             this.logReportSent.OtherData = "";
             this.logReportSent.UserId = -1;
             // 
+            // logMsgTo2
+            // 
+            this.logMsgTo2.Duration = System.TimeSpan.Parse("-10675199.02:48:05.4775808");
+            this.logMsgTo2.EventId = Microsoft.SharePoint.Workflow.SPWorkflowHistoryEventType.WorkflowComment;
+            activitybind3.Name = "swfObslugaWiadomosciOczekujacych";
+            activitybind3.Path = "msgTo";
+            this.logMsgTo2.HistoryOutcome = "";
+            this.logMsgTo2.Name = "logMsgTo2";
+            this.logMsgTo2.OtherData = "";
+            this.logMsgTo2.UserId = -1;
+            this.logMsgTo2.SetBinding(Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity.HistoryDescriptionProperty, ((System.Workflow.ComponentModel.ActivityBind)(activitybind3)));
+            // 
             // sendEmail2
             // 
             this.sendEmail2.BCC = null;
-            activitybind3.Name = "swfObslugaWiadomosciOczekujacych";
-            activitybind3.Path = "msgBody";
+            activitybind4.Name = "swfObslugaWiadomosciOczekujacych";
+            activitybind4.Path = "msgBody";
             this.sendEmail2.CC = null;
             correlationtoken1.Name = "workflowToken";
             correlationtoken1.OwnerActivityName = "swfObslugaWiadomosciOczekujacych";
@@ -114,11 +131,14 @@ namespace Workflows.swfObslugaWiadomosciOczekujacych
             this.sendEmail2.Headers = null;
             this.sendEmail2.IncludeStatus = false;
             this.sendEmail2.Name = "sendEmail2";
-            activitybind4.Name = "swfObslugaWiadomosciOczekujacych";
-            activitybind4.Path = "msgSubject";
-            this.sendEmail2.To = "stafix24@hotmail.com";
-            this.sendEmail2.SetBinding(Microsoft.SharePoint.WorkflowActions.SendEmail.SubjectProperty, ((System.Workflow.ComponentModel.ActivityBind)(activitybind4)));
-            this.sendEmail2.SetBinding(Microsoft.SharePoint.WorkflowActions.SendEmail.BodyProperty, ((System.Workflow.ComponentModel.ActivityBind)(activitybind3)));
+            activitybind5.Name = "swfObslugaWiadomosciOczekujacych";
+            activitybind5.Path = "msgSubject";
+            activitybind6.Name = "swfObslugaWiadomosciOczekujacych";
+            activitybind6.Path = "msgTo";
+            this.sendEmail2.MethodInvoking += new System.EventHandler(this.sendEmail2_MethodInvoking);
+            this.sendEmail2.SetBinding(Microsoft.SharePoint.WorkflowActions.SendEmail.SubjectProperty, ((System.Workflow.ComponentModel.ActivityBind)(activitybind5)));
+            this.sendEmail2.SetBinding(Microsoft.SharePoint.WorkflowActions.SendEmail.BodyProperty, ((System.Workflow.ComponentModel.ActivityBind)(activitybind4)));
+            this.sendEmail2.SetBinding(Microsoft.SharePoint.WorkflowActions.SendEmail.ToProperty, ((System.Workflow.ComponentModel.ActivityBind)(activitybind6)));
             // 
             // logEmailSent
             // 
@@ -130,25 +150,37 @@ namespace Workflows.swfObslugaWiadomosciOczekujacych
             this.logEmailSent.OtherData = "";
             this.logEmailSent.UserId = -1;
             // 
+            // logMsgTo
+            // 
+            this.logMsgTo.Duration = System.TimeSpan.Parse("-10675199.02:48:05.4775808");
+            this.logMsgTo.EventId = Microsoft.SharePoint.Workflow.SPWorkflowHistoryEventType.WorkflowComment;
+            activitybind7.Name = "swfObslugaWiadomosciOczekujacych";
+            activitybind7.Path = "msgTo";
+            this.logMsgTo.HistoryOutcome = "";
+            this.logMsgTo.Name = "logMsgTo";
+            this.logMsgTo.OtherData = "";
+            this.logMsgTo.UserId = -1;
+            this.logMsgTo.SetBinding(Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity.HistoryDescriptionProperty, ((System.Workflow.ComponentModel.ActivityBind)(activitybind7)));
+            // 
             // sendEmail1
             // 
             this.sendEmail1.BCC = null;
-            activitybind5.Name = "swfObslugaWiadomosciOczekujacych";
-            activitybind5.Path = "msgBody";
+            activitybind8.Name = "swfObslugaWiadomosciOczekujacych";
+            activitybind8.Path = "msgBody";
             this.sendEmail1.CC = null;
             this.sendEmail1.CorrelationToken = correlationtoken1;
             this.sendEmail1.From = null;
             this.sendEmail1.Headers = null;
             this.sendEmail1.IncludeStatus = false;
             this.sendEmail1.Name = "sendEmail1";
-            activitybind6.Name = "swfObslugaWiadomosciOczekujacych";
-            activitybind6.Path = "msgSubject";
-            activitybind7.Name = "swfObslugaWiadomosciOczekujacych";
-            activitybind7.Path = "msgTo";
+            activitybind9.Name = "swfObslugaWiadomosciOczekujacych";
+            activitybind9.Path = "msgSubject";
+            activitybind10.Name = "swfObslugaWiadomosciOczekujacych";
+            activitybind10.Path = "msgTo";
             this.sendEmail1.MethodInvoking += new System.EventHandler(this.sendEmail1_MethodInvoking);
-            this.sendEmail1.SetBinding(Microsoft.SharePoint.WorkflowActions.SendEmail.SubjectProperty, ((System.Workflow.ComponentModel.ActivityBind)(activitybind6)));
-            this.sendEmail1.SetBinding(Microsoft.SharePoint.WorkflowActions.SendEmail.ToProperty, ((System.Workflow.ComponentModel.ActivityBind)(activitybind7)));
-            this.sendEmail1.SetBinding(Microsoft.SharePoint.WorkflowActions.SendEmail.BodyProperty, ((System.Workflow.ComponentModel.ActivityBind)(activitybind5)));
+            this.sendEmail1.SetBinding(Microsoft.SharePoint.WorkflowActions.SendEmail.SubjectProperty, ((System.Workflow.ComponentModel.ActivityBind)(activitybind9)));
+            this.sendEmail1.SetBinding(Microsoft.SharePoint.WorkflowActions.SendEmail.ToProperty, ((System.Workflow.ComponentModel.ActivityBind)(activitybind10)));
+            this.sendEmail1.SetBinding(Microsoft.SharePoint.WorkflowActions.SendEmail.BodyProperty, ((System.Workflow.ComponentModel.ActivityBind)(activitybind8)));
             // 
             // logRequestUpated
             // 
@@ -186,6 +218,7 @@ namespace Workflows.swfObslugaWiadomosciOczekujacych
             // ifResults
             // 
             this.ifResults.Activities.Add(this.sendEmail2);
+            this.ifResults.Activities.Add(this.logMsgTo2);
             this.ifResults.Activities.Add(this.logReportSent);
             codecondition1.Condition += new System.EventHandler<System.Workflow.Activities.ConditionalEventArgs>(this.hasResults);
             this.ifResults.Condition = codecondition1;
@@ -194,6 +227,7 @@ namespace Workflows.swfObslugaWiadomosciOczekujacych
             // ifElseBranchActivity2
             // 
             this.ifElseBranchActivity2.Activities.Add(this.sendEmail1);
+            this.ifElseBranchActivity2.Activities.Add(this.logMsgTo);
             this.ifElseBranchActivity2.Activities.Add(this.logEmailSent);
             this.ifElseBranchActivity2.Name = "ifElseBranchActivity2";
             // 
@@ -259,30 +293,30 @@ namespace Workflows.swfObslugaWiadomosciOczekujacych
             this.logSelected.Duration = System.TimeSpan.Parse("-10675199.02:48:05.4775808");
             this.logSelected.EventId = Microsoft.SharePoint.Workflow.SPWorkflowHistoryEventType.WorkflowComment;
             this.logSelected.HistoryDescription = "Liczba wiadomości do obsługi";
-            activitybind8.Name = "swfObslugaWiadomosciOczekujacych";
-            activitybind8.Path = "logSelected_HistoryOutcome";
+            activitybind11.Name = "swfObslugaWiadomosciOczekujacych";
+            activitybind11.Path = "logSelected_HistoryOutcome";
             this.logSelected.Name = "logSelected";
             this.logSelected.OtherData = "";
             this.logSelected.UserId = -1;
-            this.logSelected.SetBinding(Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity.HistoryOutcomeProperty, ((System.Workflow.ComponentModel.ActivityBind)(activitybind8)));
+            this.logSelected.SetBinding(Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity.HistoryOutcomeProperty, ((System.Workflow.ComponentModel.ActivityBind)(activitybind11)));
             // 
             // Select_ListaWiadomosciOczekujacych
             // 
             this.Select_ListaWiadomosciOczekujacych.Name = "Select_ListaWiadomosciOczekujacych";
             this.Select_ListaWiadomosciOczekujacych.ExecuteCode += new System.EventHandler(this.Select_ListaWiadomosciOczekujacych_ExecuteCode);
-            activitybind10.Name = "swfObslugaWiadomosciOczekujacych";
-            activitybind10.Path = "workflowId";
+            activitybind13.Name = "swfObslugaWiadomosciOczekujacych";
+            activitybind13.Path = "workflowId";
             // 
             // onWorkflowActivated1
             // 
             this.onWorkflowActivated1.CorrelationToken = correlationtoken1;
             this.onWorkflowActivated1.EventName = "OnWorkflowActivated";
             this.onWorkflowActivated1.Name = "onWorkflowActivated1";
-            activitybind9.Name = "swfObslugaWiadomosciOczekujacych";
-            activitybind9.Path = "workflowProperties";
+            activitybind12.Name = "swfObslugaWiadomosciOczekujacych";
+            activitybind12.Path = "workflowProperties";
             this.onWorkflowActivated1.Invoked += new System.EventHandler<System.Workflow.Activities.ExternalDataEventArgs>(this.onWorkflowActivated1_Invoked);
-            this.onWorkflowActivated1.SetBinding(Microsoft.SharePoint.WorkflowActions.OnWorkflowActivated.WorkflowIdProperty, ((System.Workflow.ComponentModel.ActivityBind)(activitybind10)));
-            this.onWorkflowActivated1.SetBinding(Microsoft.SharePoint.WorkflowActions.OnWorkflowActivated.WorkflowPropertiesProperty, ((System.Workflow.ComponentModel.ActivityBind)(activitybind9)));
+            this.onWorkflowActivated1.SetBinding(Microsoft.SharePoint.WorkflowActions.OnWorkflowActivated.WorkflowIdProperty, ((System.Workflow.ComponentModel.ActivityBind)(activitybind13)));
+            this.onWorkflowActivated1.SetBinding(Microsoft.SharePoint.WorkflowActions.OnWorkflowActivated.WorkflowPropertiesProperty, ((System.Workflow.ComponentModel.ActivityBind)(activitybind12)));
             // 
             // swfObslugaWiadomosciOczekujacych
             // 
@@ -302,6 +336,10 @@ namespace Workflows.swfObslugaWiadomosciOczekujacych
         }
 
         #endregion
+
+        private Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity logMsgTo;
+
+        private Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity logMsgTo2;
 
         private CodeActivity Finalize_MessageBody;
 
@@ -354,6 +392,11 @@ namespace Workflows.swfObslugaWiadomosciOczekujacych
         private CodeActivity Select_ListaWiadomosciOczekujacych;
 
         private Microsoft.SharePoint.WorkflowActions.OnWorkflowActivated onWorkflowActivated1;
+
+
+
+
+
 
 
 

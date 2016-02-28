@@ -56,7 +56,8 @@ namespace Workflows.swfObslugaKartKontrolnych
         {
             SPListItem item = myEnum.Current as SPListItem;
 
-            BLL.Workflows.StartWorkflow(item, "Przygotuj wiadomość dla klienta");
+            SPWorkflow wf = BLL.Workflows.StartWorkflow(item, "Przygotuj wiadomość dla klienta");
+            Debug.WriteLine("StartWorkflow: Przygotuj wiadomość dla klienta " + wf.InternalState.ToString());
 
             logWorkflowStarted_HistoryOutcome = BLL.Tools.Get_LookupValue(item, "selKlient");
 

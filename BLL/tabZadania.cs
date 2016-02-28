@@ -811,5 +811,57 @@ namespace BLL
             return web.Lists.TryGetList(targetList).Items.GetItemById(itemId);
         }
 
+        /// <summary>
+        /// na podstawie informacji zawartych z formatce rozliczenia VAT tworzy dodatkowe zadanie dla bieżącego klienta i okresu
+        /// kopiując wybrane informacje do zadania.
+        /// </summary>
+        /// <param name="web"></param>
+        /// <param name="item">Zadanie CT=Rozliczenie podatku VAT</param>
+        public static void Create_KKDVAT(SPWeb web, SPListItem item)
+        {
+            SPList list = web.Lists.TryGetList(targetList);
+
+            SPListItem newItem = list.AddItem();
+
+            newItem["ContentType"] = "Karta kontrolna eDeklaracji VAT";
+            string procName = ": " + newItem["ContentType"].ToString();
+
+            BLL.Tools.Set_Value(newItem, "selKlient", BLL.Tools.Get_LookupId(item, "selKlient"));
+            BLL.Tools.Set_Value(newItem, "selOkres", BLL.Tools.Get_LookupId(item, "selOkres"));
+
+            //procedura
+            int procId = BLL.tabProcedury.Ensure(item.Web, procName, true);
+            if (procId>0) BLL.Tools.Set_Index(newItem, "selProcedura", procId);
+
+            //temat
+            BLL.Tools.Set_Text(newItem, "Title", procName);
+
+            //operator
+            int operatorId = BLL.tabProcedury.Get_OperatorById(web, procId);
+            if (operatorId > 0) BLL.Tools.Set_Index(newItem, "selOperator", operatorId);
+
+            //kopiuj notatkę
+            BLL.Tools.Set_Text(newItem, "colNotatka", BLL.Tools.Get_Text(item, "colNotatka"));
+
+            //termin realizacji
+            //w zależności od cyklu rozliczeniowego VAT
+
+            string rozliczenieVAT = BLL.Tools.Get_Text(item, "enumRozliczenieVAT");
+
+            DateTime terminRealizacji;
+            if (rozliczenieVAT.Equals("Kwartalnie"))
+            {
+                terminRealizacji = BLL.tabOkresy.Get_TerminPlatnosciByOkresId(web, "colVAT_TerminPlatnosciPodatkuKW", BLL.Tools.Get_LookupId(item, "selOkres"));
+            }
+            else
+            {
+                terminRealizacji = BLL.tabOkresy.Get_TerminPlatnosciByOkresId(web, "colVAT_TerminPlatnosciPodatku", BLL.Tools.Get_LookupId(item, "selOkres"));
+            }
+            BLL.Tools.Set_Date(newItem, "colTerminRealizacji", terminRealizacji);
+
+            BLL.Tools.Set_Text(newItem, "enumStatusZadania", "Nowe");
+
+            newItem.Update();
+        }
     }
 }

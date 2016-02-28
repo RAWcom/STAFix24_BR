@@ -33,7 +33,6 @@ namespace Workflows.tabZadaniaWF
             System.Workflow.ComponentModel.ActivityBind activitybind1 = new System.Workflow.ComponentModel.ActivityBind();
             System.Workflow.Activities.CodeCondition codecondition5 = new System.Workflow.Activities.CodeCondition();
             System.Workflow.Activities.CodeCondition codecondition6 = new System.Workflow.Activities.CodeCondition();
-            System.Workflow.Activities.CodeCondition codecondition7 = new System.Workflow.Activities.CodeCondition();
             System.Workflow.ComponentModel.ActivityBind activitybind2 = new System.Workflow.ComponentModel.ActivityBind();
             System.Workflow.ComponentModel.ActivityBind activitybind4 = new System.Workflow.ComponentModel.ActivityBind();
             System.Workflow.Runtime.CorrelationToken correlationtoken1 = new System.Workflow.Runtime.CorrelationToken();
@@ -41,35 +40,33 @@ namespace Workflows.tabZadaniaWF
             this.Update_KK_OdbiorDok = new System.Workflow.Activities.CodeActivity();
             this.logUpdateDOKInfo = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
             this.ifCT_Podatek = new System.Workflow.Activities.IfElseBranchActivity();
-            this.Reset_Command2 = new System.Workflow.Activities.CodeActivity();
-            this.Manage_cmdFormatka_Wiadomosci = new System.Workflow.Activities.CodeActivity();
-            this.logcmdFormatka_Wiadomość = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
             this.Reset_Command1 = new System.Workflow.Activities.CodeActivity();
             this.Manage_cmdForamatka_Zadania = new System.Workflow.Activities.CodeActivity();
             this.logcmdFormatka_Zadanie = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
+            this.Reset_Command2 = new System.Workflow.Activities.CodeActivity();
+            this.Manage_cmdFormatka_Wiadomosci = new System.Workflow.Activities.CodeActivity();
+            this.logcmdFormatka_Wiadomość = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
             this.POD_info = new System.Workflow.Activities.IfElseActivity();
             this.Manage_NoCommand = new System.Workflow.Activities.CodeActivity();
             this.logCommandNonActive = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
             this.Reset_Command = new System.Workflow.Activities.CodeActivity();
             this.Mange_cmdFormatka = new System.Workflow.Activities.CodeActivity();
             this.logToHistoryListActivity5 = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
-            this.cmdFormatka_Wiadomosc = new System.Workflow.Activities.IfElseBranchActivity();
             this.cmdFormatka_Zadanie = new System.Workflow.Activities.IfElseBranchActivity();
+            this.cmdFormatka_Wiadomosc = new System.Workflow.Activities.IfElseBranchActivity();
             this.elseNoCommand = new System.Workflow.Activities.IfElseBranchActivity();
             this.cmdFormatka = new System.Workflow.Activities.IfElseBranchActivity();
             this.logErrorMessage = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
             this.ErrorHandler = new System.Workflow.Activities.CodeActivity();
-            this.logToHistoryListActivity4 = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
-            this.Command_Wiadomość = new System.Workflow.Activities.IfElseActivity();
-            this.logToHistoryListActivity3 = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
             this.Command_Zadanie = new System.Workflow.Activities.IfElseActivity();
             this.logToHistoryListActivity2 = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
+            this.Command_Wiadomość = new System.Workflow.Activities.IfElseActivity();
+            this.logToHistoryListActivity3 = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
             this.Command = new System.Workflow.Activities.IfElseActivity();
             this.logToHistoryListActivity1 = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
             this.faultHandlerActivity1 = new System.Workflow.ComponentModel.FaultHandlerActivity();
-            this.else1 = new System.Workflow.Activities.IfElseBranchActivity();
+            this.elseZadanie = new System.Workflow.Activities.IfElseBranchActivity();
             this.ifWiadomosc = new System.Workflow.Activities.IfElseBranchActivity();
-            this.ifZadanie = new System.Workflow.Activities.IfElseBranchActivity();
             this.ifSzablonZadania = new System.Workflow.Activities.IfElseBranchActivity();
             this.faultHandlersActivity1 = new System.Workflow.ComponentModel.FaultHandlersActivity();
             this.UpdateItem = new System.Workflow.Activities.CodeActivity();
@@ -105,26 +102,6 @@ namespace Workflows.tabZadaniaWF
             this.ifCT_Podatek.Condition = codecondition1;
             this.ifCT_Podatek.Name = "ifCT_Podatek";
             // 
-            // Reset_Command2
-            // 
-            this.Reset_Command2.Name = "Reset_Command2";
-            this.Reset_Command2.ExecuteCode += new System.EventHandler(this.Reset_Command_ExecuteCode);
-            // 
-            // Manage_cmdFormatka_Wiadomosci
-            // 
-            this.Manage_cmdFormatka_Wiadomosci.Name = "Manage_cmdFormatka_Wiadomosci";
-            this.Manage_cmdFormatka_Wiadomosci.ExecuteCode += new System.EventHandler(this.Manage_cmdFormatka_Wiadomosci_ExecuteCode);
-            // 
-            // logcmdFormatka_Wiadomość
-            // 
-            this.logcmdFormatka_Wiadomość.Duration = System.TimeSpan.Parse("-10675199.02:48:05.4775808");
-            this.logcmdFormatka_Wiadomość.EventId = Microsoft.SharePoint.Workflow.SPWorkflowHistoryEventType.WorkflowComment;
-            this.logcmdFormatka_Wiadomość.HistoryDescription = "cmdFormatka_Wiadomosc";
-            this.logcmdFormatka_Wiadomość.HistoryOutcome = "Active";
-            this.logcmdFormatka_Wiadomość.Name = "logcmdFormatka_Wiadomość";
-            this.logcmdFormatka_Wiadomość.OtherData = "";
-            this.logcmdFormatka_Wiadomość.UserId = -1;
-            // 
             // Reset_Command1
             // 
             this.Reset_Command1.Name = "Reset_Command1";
@@ -144,6 +121,26 @@ namespace Workflows.tabZadaniaWF
             this.logcmdFormatka_Zadanie.Name = "logcmdFormatka_Zadanie";
             this.logcmdFormatka_Zadanie.OtherData = "";
             this.logcmdFormatka_Zadanie.UserId = -1;
+            // 
+            // Reset_Command2
+            // 
+            this.Reset_Command2.Name = "Reset_Command2";
+            this.Reset_Command2.ExecuteCode += new System.EventHandler(this.Reset_Command_ExecuteCode);
+            // 
+            // Manage_cmdFormatka_Wiadomosci
+            // 
+            this.Manage_cmdFormatka_Wiadomosci.Name = "Manage_cmdFormatka_Wiadomosci";
+            this.Manage_cmdFormatka_Wiadomosci.ExecuteCode += new System.EventHandler(this.Manage_cmdFormatka_Wiadomosci_ExecuteCode);
+            // 
+            // logcmdFormatka_Wiadomość
+            // 
+            this.logcmdFormatka_Wiadomość.Duration = System.TimeSpan.Parse("-10675199.02:48:05.4775808");
+            this.logcmdFormatka_Wiadomość.EventId = Microsoft.SharePoint.Workflow.SPWorkflowHistoryEventType.WorkflowComment;
+            this.logcmdFormatka_Wiadomość.HistoryDescription = "cmdFormatka_Wiadomosc";
+            this.logcmdFormatka_Wiadomość.HistoryOutcome = "Active";
+            this.logcmdFormatka_Wiadomość.Name = "logcmdFormatka_Wiadomość";
+            this.logcmdFormatka_Wiadomość.OtherData = "";
+            this.logcmdFormatka_Wiadomość.UserId = -1;
             // 
             // POD_info
             // 
@@ -185,23 +182,23 @@ namespace Workflows.tabZadaniaWF
             this.logToHistoryListActivity5.OtherData = "";
             this.logToHistoryListActivity5.UserId = -1;
             // 
-            // cmdFormatka_Wiadomosc
-            // 
-            this.cmdFormatka_Wiadomosc.Activities.Add(this.logcmdFormatka_Wiadomość);
-            this.cmdFormatka_Wiadomosc.Activities.Add(this.Manage_cmdFormatka_Wiadomosci);
-            this.cmdFormatka_Wiadomosc.Activities.Add(this.Reset_Command2);
-            codecondition2.Condition += new System.EventHandler<System.Workflow.Activities.ConditionalEventArgs>(this.iscmdFormatka_Wiadomosc);
-            this.cmdFormatka_Wiadomosc.Condition = codecondition2;
-            this.cmdFormatka_Wiadomosc.Name = "cmdFormatka_Wiadomosc";
-            // 
             // cmdFormatka_Zadanie
             // 
             this.cmdFormatka_Zadanie.Activities.Add(this.logcmdFormatka_Zadanie);
             this.cmdFormatka_Zadanie.Activities.Add(this.Manage_cmdForamatka_Zadania);
             this.cmdFormatka_Zadanie.Activities.Add(this.Reset_Command1);
-            codecondition3.Condition += new System.EventHandler<System.Workflow.Activities.ConditionalEventArgs>(this.iscmdFormatka_Zadanie);
-            this.cmdFormatka_Zadanie.Condition = codecondition3;
+            codecondition2.Condition += new System.EventHandler<System.Workflow.Activities.ConditionalEventArgs>(this.iscmdFormatka_Zadanie);
+            this.cmdFormatka_Zadanie.Condition = codecondition2;
             this.cmdFormatka_Zadanie.Name = "cmdFormatka_Zadanie";
+            // 
+            // cmdFormatka_Wiadomosc
+            // 
+            this.cmdFormatka_Wiadomosc.Activities.Add(this.logcmdFormatka_Wiadomość);
+            this.cmdFormatka_Wiadomosc.Activities.Add(this.Manage_cmdFormatka_Wiadomosci);
+            this.cmdFormatka_Wiadomosc.Activities.Add(this.Reset_Command2);
+            codecondition3.Condition += new System.EventHandler<System.Workflow.Activities.ConditionalEventArgs>(this.iscmdFormatka_Wiadomosc);
+            this.cmdFormatka_Wiadomosc.Condition = codecondition3;
+            this.cmdFormatka_Wiadomosc.Name = "cmdFormatka_Wiadomosc";
             // 
             // elseNoCommand
             // 
@@ -236,15 +233,20 @@ namespace Workflows.tabZadaniaWF
             this.ErrorHandler.Name = "ErrorHandler";
             this.ErrorHandler.ExecuteCode += new System.EventHandler(this.ErrorHandler_ExecuteCode);
             // 
-            // logToHistoryListActivity4
+            // Command_Zadanie
             // 
-            this.logToHistoryListActivity4.Duration = System.TimeSpan.Parse("-10675199.02:48:05.4775808");
-            this.logToHistoryListActivity4.EventId = Microsoft.SharePoint.Workflow.SPWorkflowHistoryEventType.WorkflowComment;
-            this.logToHistoryListActivity4.HistoryDescription = "Nie obsługiwany CT";
-            this.logToHistoryListActivity4.HistoryOutcome = "";
-            this.logToHistoryListActivity4.Name = "logToHistoryListActivity4";
-            this.logToHistoryListActivity4.OtherData = "";
-            this.logToHistoryListActivity4.UserId = -1;
+            this.Command_Zadanie.Activities.Add(this.cmdFormatka_Zadanie);
+            this.Command_Zadanie.Name = "Command_Zadanie";
+            // 
+            // logToHistoryListActivity2
+            // 
+            this.logToHistoryListActivity2.Duration = System.TimeSpan.Parse("-10675199.02:48:05.4775808");
+            this.logToHistoryListActivity2.EventId = Microsoft.SharePoint.Workflow.SPWorkflowHistoryEventType.WorkflowComment;
+            this.logToHistoryListActivity2.HistoryDescription = "Zadanie";
+            this.logToHistoryListActivity2.HistoryOutcome = "";
+            this.logToHistoryListActivity2.Name = "logToHistoryListActivity2";
+            this.logToHistoryListActivity2.OtherData = "";
+            this.logToHistoryListActivity2.UserId = -1;
             // 
             // Command_Wiadomość
             // 
@@ -260,21 +262,6 @@ namespace Workflows.tabZadaniaWF
             this.logToHistoryListActivity3.Name = "logToHistoryListActivity3";
             this.logToHistoryListActivity3.OtherData = "";
             this.logToHistoryListActivity3.UserId = -1;
-            // 
-            // Command_Zadanie
-            // 
-            this.Command_Zadanie.Activities.Add(this.cmdFormatka_Zadanie);
-            this.Command_Zadanie.Name = "Command_Zadanie";
-            // 
-            // logToHistoryListActivity2
-            // 
-            this.logToHistoryListActivity2.Duration = System.TimeSpan.Parse("-10675199.02:48:05.4775808");
-            this.logToHistoryListActivity2.EventId = Microsoft.SharePoint.Workflow.SPWorkflowHistoryEventType.WorkflowComment;
-            this.logToHistoryListActivity2.HistoryDescription = "Zadanie";
-            this.logToHistoryListActivity2.HistoryOutcome = "";
-            this.logToHistoryListActivity2.Name = "logToHistoryListActivity2";
-            this.logToHistoryListActivity2.OtherData = "";
-            this.logToHistoryListActivity2.UserId = -1;
             // 
             // Command
             // 
@@ -299,10 +286,11 @@ namespace Workflows.tabZadaniaWF
             this.faultHandlerActivity1.FaultType = typeof(System.Exception);
             this.faultHandlerActivity1.Name = "faultHandlerActivity1";
             // 
-            // else1
+            // elseZadanie
             // 
-            this.else1.Activities.Add(this.logToHistoryListActivity4);
-            this.else1.Name = "else1";
+            this.elseZadanie.Activities.Add(this.logToHistoryListActivity2);
+            this.elseZadanie.Activities.Add(this.Command_Zadanie);
+            this.elseZadanie.Name = "elseZadanie";
             // 
             // ifWiadomosc
             // 
@@ -312,20 +300,12 @@ namespace Workflows.tabZadaniaWF
             this.ifWiadomosc.Condition = codecondition5;
             this.ifWiadomosc.Name = "ifWiadomosc";
             // 
-            // ifZadanie
-            // 
-            this.ifZadanie.Activities.Add(this.logToHistoryListActivity2);
-            this.ifZadanie.Activities.Add(this.Command_Zadanie);
-            codecondition6.Condition += new System.EventHandler<System.Workflow.Activities.ConditionalEventArgs>(this.isZadanie);
-            this.ifZadanie.Condition = codecondition6;
-            this.ifZadanie.Name = "ifZadanie";
-            // 
             // ifSzablonZadania
             // 
             this.ifSzablonZadania.Activities.Add(this.logToHistoryListActivity1);
             this.ifSzablonZadania.Activities.Add(this.Command);
-            codecondition7.Condition += new System.EventHandler<System.Workflow.Activities.ConditionalEventArgs>(this.isSzablonZadania);
-            this.ifSzablonZadania.Condition = codecondition7;
+            codecondition6.Condition += new System.EventHandler<System.Workflow.Activities.ConditionalEventArgs>(this.isSzablonZadania);
+            this.ifSzablonZadania.Condition = codecondition6;
             this.ifSzablonZadania.Name = "ifSzablonZadania";
             // 
             // faultHandlersActivity1
@@ -353,9 +333,8 @@ namespace Workflows.tabZadaniaWF
             // ContentType
             // 
             this.ContentType.Activities.Add(this.ifSzablonZadania);
-            this.ContentType.Activities.Add(this.ifZadanie);
             this.ContentType.Activities.Add(this.ifWiadomosc);
-            this.ContentType.Activities.Add(this.else1);
+            this.ContentType.Activities.Add(this.elseZadanie);
             this.ContentType.Name = "ContentType";
             // 
             // logSetupCompleted
@@ -460,8 +439,6 @@ namespace Workflows.tabZadaniaWF
 
         private IfElseBranchActivity cmdFormatka;
 
-        private Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity logToHistoryListActivity4;
-
         private IfElseActivity Command_Wiadomość;
 
         private Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity logToHistoryListActivity3;
@@ -474,11 +451,9 @@ namespace Workflows.tabZadaniaWF
 
         private Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity logToHistoryListActivity1;
 
-        private IfElseBranchActivity else1;
-
         private IfElseBranchActivity ifWiadomosc;
 
-        private IfElseBranchActivity ifZadanie;
+        private IfElseBranchActivity elseZadanie;
 
         private IfElseBranchActivity ifSzablonZadania;
 
@@ -507,6 +482,8 @@ namespace Workflows.tabZadaniaWF
         private FaultHandlersActivity faultHandlersActivity1;
 
         private Microsoft.SharePoint.WorkflowActions.OnWorkflowActivated onWorkflowActivated1;
+
+
 
 
 

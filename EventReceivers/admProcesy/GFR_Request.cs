@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.SharePoint;
+using Microsoft.SharePoint.Workflow;
+using System.Diagnostics;
 
 namespace EventReceivers.admProcesy
 {
@@ -110,7 +112,8 @@ namespace EventReceivers.admProcesy
 
             newItem.SystemUpdate();
 
-            BLL.Workflows.StartWorkflow(newItem, "Generuj formatki rozliczeniowe dla klienta");
+            SPWorkflow wf = BLL.Workflows.StartWorkflow(newItem, "Generuj formatki rozliczeniowe dla klienta");
+            Debug.WriteLine("StartWorkflow: Generuj formatki rozliczeniowe dla klienta " + wf.InternalState.ToString());
         }
     }
 }

@@ -54,6 +54,9 @@
     <Compile Include="Features\CustomActions\CustomActions.EventReceiver.cs">
       <DependentUpon>CustomActions.feature</DependentUpon>
     </Compile>
+    <Compile Include="Features\SiteWorkflows\SiteWorkflows.EventReceiver.cs">
+      <DependentUpon>SiteWorkflows.feature</DependentUpon>
+    </Compile>
     <Compile Include="Features\TimerJobs\TimerJobs.EventReceiver.cs">
       <DependentUpon>TimerJobs.feature</DependentUpon>
     </Compile>
@@ -84,11 +87,14 @@
     <None Include="Features\EventReceivers\EventReceivers.feature">
       <FeatureId>{b05bf8c5-0365-4f4a-bdf1-04344e1144ca}</FeatureId>
     </None>
-    <None Include="Features\TimerJobs\TimerJobs.feature">
-      <FeatureId>{6ff9fa36-0878-4a82-be9f-1d873aad25bb}</FeatureId>
+    <None Include="Features\SiteWorkflows\SiteWorkflows.feature">
+      <FeatureId>{0026f035-23d4-476a-860f-74450469f01d}</FeatureId>
     </None>
     <None Include="Features\Workflows\Workflows.feature">
-      <FeatureId>{34ecb22c-c0c5-497b-9fba-5229fd868dd3}</FeatureId>
+      <FeatureId>{31fe062a-398b-482b-95af-49b6055abbd5}</FeatureId>
+    </None>
+    <None Include="Features\TimerJobs\TimerJobs.feature">
+      <FeatureId>{6ff9fa36-0878-4a82-be9f-1d873aad25bb}</FeatureId>
     </None>
     <None Include="Images\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{348bef8e-f411-4079-adeb-8646bc1f082e}</SharePointProjectItemId>
@@ -113,11 +119,14 @@
     <Content Include="Features\EventReceivers\EventReceivers.Template.xml">
       <DependentUpon>EventReceivers.feature</DependentUpon>
     </Content>
-    <Content Include="Features\TimerJobs\TimerJobs.Template.xml">
-      <DependentUpon>TimerJobs.feature</DependentUpon>
+    <Content Include="Features\SiteWorkflows\SiteWorkflows.Template.xml">
+      <DependentUpon>SiteWorkflows.feature</DependentUpon>
     </Content>
     <Content Include="Features\Workflows\Workflows.Template.xml">
       <DependentUpon>Workflows.feature</DependentUpon>
+    </Content>
+    <Content Include="Features\TimerJobs\TimerJobs.Template.xml">
+      <DependentUpon>TimerJobs.feature</DependentUpon>
     </Content>
   </ItemGroup>
   <ItemGroup />

@@ -3,36 +3,69 @@ using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Security;
+using System.Diagnostics;
+using System.Text;
 
 namespace Stafix.Features.Workflows
 {
-    [Guid("c14b0f66-3569-4106-a516-2f818f0a5b86")]
+    [Guid("f43ab3ab-4aa0-4abb-b953-e0308ce6327e")]
     public class WorkflowsEventReceiver : SPFeatureReceiver
     {
-        private string workFlowHistoryListName = "Workflow History";
-        private string workFlowTaskListName = "Workflow Tasks";
-
         public override void FeatureActivated(SPFeatureReceiverProperties properties)
         {
-
-            SPSite site = properties.Feature.Parent as SPSite;
-            SPWeb web = site.RootWeb;
-
             try
             {
-                //swfStratyZLatUbieglych
-                BLL.Workflows.AssociateSiteWorkflow(web, "AB72115A-F93D-44CE-A21C-6B386482643F", "Generator rekordów - Straty z lat ubiegłych", workFlowTaskListName, workFlowHistoryListName);
+                var site = properties.Feature.Parent as SPSite;
+                string associationName;
+                SPWeb web = site.RootWeb;
+                StringBuilder errMsg = new StringBuilder();
 
-                //swfObslugaKolejkiWiadomosci
-                BLL.Workflows.AssociateSiteWorkflow(web, "37286101-2D91-4114-972A-D2C3CCB2F78C", "Obsługa kolejki wiadomości", workFlowTaskListName, workFlowHistoryListName);
+                // tabZadania
+                EnsureWorkflowAssociation(web, "Zadania", "tabZadaniaWF", ref errMsg);
 
-                //swfObslugaKartKontrolnych
-                BLL.Workflows.AssociateSiteWorkflow(web, "54743C0D-B49A-495C-A3DE-F46094E60195", "Obsługa kart kontrolnych", workFlowTaskListName, workFlowHistoryListName);
+                // tabKartyKontrolne
+                EnsureWorkflowAssociation(web, "Karty kontrolne", "Przygotuj wiadomość dla klienta", ref errMsg);
 
+                // tabWiadomości
+                EnsureWorkflowAssociation(web, "Wiadomości", "Obsługa wiadomości", ref errMsg);
+                //associationName = EnsureWorkflowAssociation(web, "Wiadomosci", "Wyślij kopię wiadomości", ref errMsg);
+
+                //admProcesy
+                EnsureWorkflowAssociation(web, "admProcesy", "admProcesyWF", ref errMsg);
+                EnsureWorkflowAssociation(web, "admProcesy", "Generuj formatki rozliczeniowe", ref errMsg);
+                EnsureWorkflowAssociation(web, "admProcesy", "Generuj formatki rozliczeniowe dla klienta", ref errMsg);
+
+                if (errMsg.Length > 0)
+                {
+                    string subject = string.Format("Workflow Feature ({0}) issues", site.Url.ToString());
+                    string bodyHTML = string.Format("<ol>{0}</ol>", errMsg.ToString());
+                    ElasticEmail.EmailGenerator.SendMail(subject, bodyHTML);
+                }
+                else
+                {
+                    string subject = string.Format("Workflow Feature ({0}) activated", site.Url.ToString());
+                    ElasticEmail.EmailGenerator.SendMail(subject, string.Empty);
+                }
             }
             catch (Exception ex)
             {
-                var result = ElasticEmail.EmailGenerator.ReportError(ex, site.Url);
+                ElasticEmail.EmailGenerator.ReportError(ex, (properties.Feature.Parent as SPSite).Url);
+            }
+
+        }
+
+        private static void EnsureWorkflowAssociation(SPWeb web, string listName, string workflowTemplateName, ref StringBuilder errMsg)
+        {
+            SPList list = web.Lists.TryGetList(listName);
+            if (list!=null)
+            {
+                string associationName = workflowTemplateName;
+                if (list != null) BLL.Workflows.EnsureWorkflowAssociation(list, workflowTemplateName, associationName, false, false, false);
+                Debug.WriteLine("Workflow: " + workflowTemplateName + " - associated");
+            }
+            else
+            {
+                errMsg.AppendFormat("<li>Lista: '{0}' nie istnieje - workflow '{1}' nie może być skojarzony</li>", listName, workflowTemplateName); 
             }
         }
     }

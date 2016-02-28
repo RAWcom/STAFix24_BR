@@ -12,8 +12,13 @@ namespace BLL
 {
     public class Workflows
     {
-        public static void StartWorkflow(SPListItem listItem, string workflowName)
+        public const string workflowHistoryListName = "Workflow History";
+        public const string workflowTaskListName = "Workflow Tasks";
+
+        public static SPWorkflow StartWorkflow(SPListItem listItem, string workflowName)
         {
+            SPWorkflow wf = null;
+
             try
             {
                 SPWorkflowManager manager = listItem.Web.Site.WorkflowManager;
@@ -30,7 +35,10 @@ namespace BLL
 
                         try
                         {
-                            var result = manager.StartWorkflow(listItem, objWorkflowAssociation, objWorkflowAssociation.AssociationData, SPWorkflowRunOptions.SynchronousAllowPostpone);
+                            //result = manager.StartWorkflow(listItem, objWorkflowAssociation, objWorkflowAssociation.AssociationData, SPWorkflowRunOptions.SynchronousAllowPostpone);
+                            wf = manager.StartWorkflow(listItem, objWorkflowAssociation, objWorkflowAssociation.AssociationData, true);
+
+                            //ElasticEmail.EmailGenerator.SendMail("StartWorkflow: " + workflowName + " " + wf.InternalState.ToString(), "");
 
                             //manager.StartWorkflow(listItem, objWorkflowAssociation, objWorkflowAssociation.AssociationData, true);
                             //The above line will start the workflow...
@@ -45,26 +53,32 @@ namespace BLL
             }
             catch (Exception)
             { }
+
+            return wf;
         }
 
-
-        public static void StartSiteWorkflow(SPSite site, string workflowName, string initParameters)
+        public static SPWorkflow StartSiteWorkflow(SPSite site, string workflowName, string initParameters)
         {
+            SPWorkflow wf = null;
+            
             using (SPWeb web = site.OpenWeb()) // get the web
             {
                 //find workflow to start
                 var assoc = web.WorkflowAssociations.GetAssociationByName(workflowName, CultureInfo.InvariantCulture);
 
-                if (string.IsNullOrEmpty(initParameters)) initParameters = assoc.AssociationData;
+                if (string.IsNullOrEmpty(initParameters)) initParameters = string.Empty;
 
                 //this is the call to start the workflow
-                var result = site.WorkflowManager.StartWorkflow(null, assoc, initParameters.ToString() , SPWorkflowRunOptions.SynchronousAllowPostpone);
-
-                if (!result.InternalState.ToString().Equals("Completed"))
+                //result = site.WorkflowManager.StartWorkflow(null, assoc, initParameters.ToString() , SPWorkflowRunOptions.SynchronousAllowPostpone);
+                wf = site.WorkflowManager.StartWorkflow(site, assoc, initParameters.ToString(),SPWorkflowRunOptions.SynchronousAllowPostpone);
+                
+                if (!wf.InternalState.ToString().Equals("Completed"))
                 {
-                    ElasticEmail.EmailGenerator.SendMail(string.Format(@"WorkflowManager({0})", site.RootWeb.ToString()), "InternalState=" + result.InternalState.ToString());
+                    ElasticEmail.EmailGenerator.SendMail(string.Format(@"WorkflowManager({0})", site.RootWeb.ToString()), "InternalState=" + wf.InternalState.ToString());
                 }
             }
+
+            return wf;
         }
 
         public static void AssociateSiteWorkflow(SPWeb web, string workflowTemplateBaseGuid, string workflowAssociationName, string workFlowTaskListName, string workFlowHistoryListName)
@@ -120,5 +134,76 @@ namespace BLL
             nodeToChange.SetValue(variableValue);
             return associationDataXml.ToString();
         }
+
+
+        public static void EnsureWorkflowAssociation(SPList list, string workflowTemplateName, string associationName, bool allowManual, bool startCreate, bool startUpdate)
+        {
+            var web = list.ParentWeb;
+            var lcid = (int)web.Language;
+            var defaultCulture = new CultureInfo(lcid);
+
+            // Create the workflow association
+            SPList taskList = EnsureListExist(web, workflowTaskListName);
+            SPList historyList = EnsureListExist(web, workflowHistoryListName);
+
+            var workflowAssociation =
+                list.WorkflowAssociations.Cast<SPWorkflowAssociation>().FirstOrDefault(i => i.Name == associationName);
+            if (workflowAssociation != null)
+            {
+                list.WorkflowAssociations.Remove(workflowAssociation);
+                list.Update();
+            }
+
+            var template = web.WorkflowTemplates.GetTemplateByName(workflowTemplateName, defaultCulture);
+            var association = SPWorkflowAssociation.CreateListAssociation(template, associationName, taskList, historyList);
+
+            association.AllowManual = true;
+            association.AutoStartChange = true;
+            association.AutoStartCreate = true;
+
+            list.WorkflowAssociations.Add(association);
+            list.Update();
+
+            association = list.WorkflowAssociations[association.Id];
+            association.AllowManual = allowManual;
+            association.AutoStartChange = startUpdate;
+            association.AutoStartCreate = startCreate;
+            association.AssociationData = "<Dummy></Dummy>";
+            association.Enabled = true;
+            list.WorkflowAssociations.Update(association);
+            list.Update();
+
+            Debug.WriteLine("Ensure.List.Workflow: " + associationName + " associated");
+
+        }
+
+        private static SPList EnsureListExist(SPWeb web, string listName)
+        {
+            SPList list = web.Lists.TryGetList(listName);
+            if (list == null)
+            {
+                list = BLL.Workflows.CreateTaskList(web, listName);
+            }
+            return list;
+        }
+
+        public static SPList CreateTaskList(SPWeb web, string listName)
+        {
+            Guid listGuid = web.Lists.Add(listName, string.Empty, SPListTemplateType.Tasks);
+            SPList list = web.Lists.GetList(listGuid, false);
+            list.Hidden = false;
+            list.Update();
+            return list;
+        }
+
+        public static SPList CreateHistoryListy(SPWeb web, string listName)
+        {
+            Guid listGuid = web.Lists.Add(listName, string.Empty, SPListTemplateType.WorkflowHistory);
+            SPList list = web.Lists.GetList(listGuid, false);
+            list.Hidden = false;
+            list.Update();
+            return list;
+        }
+    
     }
 }

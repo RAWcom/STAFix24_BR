@@ -27,7 +27,8 @@ namespace EventReceivers.tabZadania
 
             try
             {
-                BLL.Workflows.StartWorkflow(properties.ListItem, "tabZadaniaWF");
+                SPWorkflow wf = BLL.Workflows.StartWorkflow(properties.ListItem, "tabZadaniaWF");
+                Debug.WriteLine("StartWorkflow: tabZadaniaWF " + wf.InternalState.ToString());
             }
             catch (Exception ex)
             {

@@ -3,8 +3,8 @@
   <Assemblies>
     <Assembly Location="STAFix24.Ewajer.BLL.dll" DeploymentTarget="GlobalAssemblyCache" />
     <Assembly Location="STAFix24.Ewajer.dll" DeploymentTarget="GlobalAssemblyCache" />
-    <Assembly Location="STAFix24.Ewajer.Workflows.dll" DeploymentTarget="GlobalAssemblyCache" />
     <Assembly Location="STAFix24.Ewajer.EventReceivers.dll" DeploymentTarget="GlobalAssemblyCache" />
+    <Assembly Location="STAFix24.Ewajer.Workflows.dll" DeploymentTarget="GlobalAssemblyCache" />
   </Assemblies>
   <TemplateFiles>
     <TemplateFile Location="Images\STAFix24_Ewajer\SETTINGS.GIF" />
@@ -12,9 +12,10 @@
     <TemplateFile Location="Images\STAFix24_Ewajer\SETTINGS32.GIF" />
   </TemplateFiles>
   <FeatureManifests>
-    <FeatureManifest Location="STAFix24_Ewajer_Workflows\Feature.xml" />
     <FeatureManifest Location="STAFix24_Ewajer_EventReceivers\Feature.xml" />
     <FeatureManifest Location="STAFix24_Ewajer_CustomActions\Feature.xml" />
     <FeatureManifest Location="STAFix24_Ewajer_TimerJobs\Feature.xml" />
+    <FeatureManifest Location="STAFix24_Ewajer_Workflows\Feature.xml" />
+    <FeatureManifest Location="STAFix24_Ewajer_SiteWorkflows\Feature.xml" />
   </FeatureManifests>
 </Solution>

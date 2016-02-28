@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Administration;
+using Microsoft.SharePoint.Workflow;
+using System.Diagnostics;
 
 namespace Stafix.TimerJobs
 {
@@ -57,7 +59,8 @@ namespace Stafix.TimerJobs
             {
                 try
                 {
-                    BLL.Workflows.StartSiteWorkflow(site, "Obsługa kart kontrolnych", null);
+                    SPWorkflow wf = BLL.Workflows.StartSiteWorkflow(site, "Obsługa kart kontrolnych", null);
+                    Debug.WriteLine("StartSiteWorkflow: Obsługa kart kontrolnych " + wf.InternalState.ToString());
                 }
                 catch (Exception ex)
                 {
