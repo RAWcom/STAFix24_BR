@@ -199,6 +199,11 @@ namespace BLL
             }
         }
 
+        /// <summary>
+        /// Wymaga dodania do listy Zadania formatki "Karta kontrolna eDeklaracji VAT"
+        /// Przy zatwierdzaniu formatki VAT jeżeli flaga VAT eDeklaracja jest ustawiona wtedy
+        /// dodatkowo procedura zakłada nowe zadanie typu KKDVAT w kartotece zadań.
+        /// </summary>
         public static bool IsKKDVATEnabled(SPWeb web)
         {
             string proKEY = "KKDVAT_ALLOWED";
@@ -216,6 +221,34 @@ namespace BLL
                 SPSecurity.RunWithElevatedPrivileges(delegate()
                 {
                     BLL.admSetup.Ensure(web, proKEY, proDisabled, "VALUE", "Przełącznik odblokowujący generowanie KKDVAT");
+                });
+
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Powoduje, że jeżeli w zadaniu flaga audytu danych jest ustawiona to w momencie zatwierdzenia
+        /// zadania nie jest ono od razu zatwierdzone ale przechodzi w pośredni status "Gotowe" - do audytu.
+        /// Kolejna operacja zatwierdzenia powoduje jego faktyczne zatwierdzenie
+        /// </summary>
+        public static bool IsADEnabled(SPWeb web)
+        {
+            string proKEY = "AD_ALLOWED";
+            string proEnabled = "Enabled";
+            string proDisabled = "Disabled";
+
+            string v = GetValue(web, proKEY);
+            if (v == proEnabled)
+            {
+                return true;
+            }
+            else
+            {
+                //dodaj nieaktywny klucz
+                SPSecurity.RunWithElevatedPrivileges(delegate()
+                {
+                    BLL.admSetup.Ensure(web, proKEY, proDisabled, "VALUE", "Przełącznik odblokowujący obsługę AD (Audyt danych)");
                 });
 
                 return false;

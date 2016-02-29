@@ -121,13 +121,31 @@ namespace Workflows.tabZadaniaWF
             Debug.WriteLine("EventReceivers.tabZadania.tabZadania.Manage_ZUS");
 
             string cmd = BLL.Tools.Get_Text(item, "cmdFormatka");
+
             if (string.IsNullOrEmpty(cmd)) return;
+
+            if (cmd.Equals(_CMD_WYCOFAJ))
+            {
+                Update_StatusZadania(item, cmd);
+                return;
+            }
 
             if (IsValid_ZUS_Form(item))
             {
                 if (IsValid_ZUS_MessageDetails(item))
                 {
-                    Update_StatusZadania(item, cmd);
+                    if (BLL.admSetup.IsADEnabled(item.Web)
+                        && BLL.Tools.Get_Flag(item, "colAudytDanych")
+                        && (cmd.Equals(_CMD_ZATWIERDZ_I_ZAKONCZ) || cmd.Equals(_CMD_ZATWIERDZ_I_WYSLIJ)))
+                    {
+                        Set_StatusZadania(item, _ZADANIE_GOTOWE);
+
+                    }
+                    else
+                    {
+                        Update_StatusZadania(item, cmd);
+                    }
+
                     BLL.tabKartyKontrolne.Update_ZUS_Data(item);
                 }
             }
@@ -342,13 +360,29 @@ namespace Workflows.tabZadaniaWF
             Debug.WriteLine("EventReceivers.tabZadania.tabZadania.Manage_PD");
 
             string cmd = BLL.Tools.Get_Text(item, "cmdFormatka");
+
             if (string.IsNullOrEmpty(cmd)) return;
+
+            if (cmd.Equals(_CMD_WYCOFAJ))
+            {
+                Update_StatusZadania(item, cmd);
+                return;
+            }
 
             if (IsValid_PD_Form(item))
             {
                 if (IsValid_PD_MessageDetails(item))
                 {
-                    Update_StatusZadania(item, cmd);
+                    if (BLL.admSetup.IsADEnabled(item.Web)
+                        && BLL.Tools.Get_Flag(item, "colAudytDanych")
+                        && (cmd.Equals(_CMD_ZATWIERDZ_I_ZAKONCZ) || cmd.Equals(_CMD_ZATWIERDZ_I_WYSLIJ)))
+                    {
+                        Set_StatusZadania(item, _ZADANIE_GOTOWE);
+                    }
+                    else
+                    {
+                        Update_StatusZadania(item, cmd);
+                    }
 
                     BLL.tabKartyKontrolne.Update_PD_Data(item);
                 }
@@ -468,13 +502,29 @@ namespace Workflows.tabZadaniaWF
             Debug.WriteLine("EventReceivers.tabZadania.tabZadania.Manage_PDS");
 
             string cmd = BLL.Tools.Get_Text(item, "cmdFormatka");
+
             if (string.IsNullOrEmpty(cmd)) return;
+
+            if (cmd.Equals(_CMD_WYCOFAJ))
+            {
+                Update_StatusZadania(item, cmd);
+                return;
+            }
 
             if (IsValid_PDS_Form(item))
             {
                 if (IsValid_PDS_MessageDetails(item))
                 {
-                    Update_StatusZadania(item, cmd);
+                    if (BLL.admSetup.IsADEnabled(item.Web)
+                        && BLL.Tools.Get_Flag(item, "colAudytDanych")
+                        && (cmd.Equals(_CMD_ZATWIERDZ_I_ZAKONCZ) || cmd.Equals(_CMD_ZATWIERDZ_I_WYSLIJ)))
+                    {
+                        Set_StatusZadania(item, _ZADANIE_GOTOWE);
+                    }
+                    else
+                    {
+                        Update_StatusZadania(item, cmd);
+                    }
                 }
             }
             else
@@ -502,13 +552,29 @@ namespace Workflows.tabZadaniaWF
             Debug.WriteLine("EventReceivers.tabZadania.tabZadania.Manage_VAT");
 
             string cmd = BLL.Tools.Get_Text(item, "cmdFormatka");
+
             if (string.IsNullOrEmpty(cmd)) return;
+
+            if (cmd.Equals(_CMD_WYCOFAJ))
+            {
+                Update_StatusZadania(item, cmd);
+                return;
+            }
 
             if (IsValid_VAT_Form(item))
             {
                 if (IsValid_VAT_MessageDetails(item))
                 {
-                    Update_StatusZadania(item, cmd);
+                    if (BLL.admSetup.IsADEnabled(item.Web)
+                        && BLL.Tools.Get_Flag(item, "colAudytDanych")
+                        && (cmd.Equals(_CMD_ZATWIERDZ_I_ZAKONCZ) || cmd.Equals(_CMD_ZATWIERDZ_I_WYSLIJ)))
+                    {
+                        Set_StatusZadania(item, _ZADANIE_GOTOWE);
+                    }
+                    else
+                    {
+                        Update_StatusZadania(item, cmd);
+                    }
 
                     BLL.tabKartyKontrolne.Update_VAT_Data(item);
 
@@ -516,8 +582,8 @@ namespace Workflows.tabZadaniaWF
 
                     if (BLL.admSetup.IsKKDVATEnabled(item.Web))
                     {
-                        if (cmd.Equals(_CMD_ZATWIERDZ_I_ZAKONCZ)
-                            || cmd.Equals(_CMD_ZATWIERDZ_I_WYSLIJ))
+                        if (!BLL.Tools.Get_Text(item, "enumStatusZadania").Equals(_ZADANIE_GOTOWE)
+                            && (cmd.Equals(_CMD_ZATWIERDZ_I_ZAKONCZ) || cmd.Equals(_CMD_ZATWIERDZ_I_WYSLIJ)))
                         {
                             if (BLL.Tools.Get_Flag(item, "colVAT_eDeklaracja"))
                             {
@@ -532,7 +598,7 @@ namespace Workflows.tabZadaniaWF
                                 }
 
                             }
-                        } 
+                        }
                     }
                 }
             }
@@ -669,7 +735,14 @@ namespace Workflows.tabZadaniaWF
             Debug.WriteLine("EventReceivers.tabZadania.tabZadania.Manage_RBR");
 
             string cmd = BLL.Tools.Get_Text(item, "cmdFormatka");
+
             if (string.IsNullOrEmpty(cmd)) return;
+
+            if (cmd.Equals(_CMD_WYCOFAJ))
+            {
+                Update_StatusZadania(item, cmd);
+                return;
+            }
 
             if (IsValid_RBR_Form(item))
             {
