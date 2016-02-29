@@ -13,7 +13,7 @@ namespace BLL
 
         internal static Models.KontaZUS GetKontaZUS(Microsoft.SharePoint.SPWeb web)
         {
-            SPList list  = web.Lists.TryGetList(targetList);
+            SPList list = web.Lists.TryGetList(targetList);
 
             KontaZUS obj = new Models.KontaZUS();
 
@@ -24,7 +24,7 @@ namespace BLL
                     .Where(i => i["KEY"].ToString() == @"ZUS_SP_KONTO")
                     .FirstOrDefault();
 
-                if (item!=null)
+                if (item != null)
                 {
                     obj.KontoSP = item["VALUE"].ToString();
                 }
@@ -59,14 +59,14 @@ namespace BLL
             SPList list = web.Lists.TryGetList(targetList);
             //if (list!=null)
             //{
-                SPListItem item = list.Items.Cast<SPListItem>()
-                    .Where(i => i["KEY"].ToString() == key)
-                    .FirstOrDefault();
+            SPListItem item = list.Items.Cast<SPListItem>()
+                .Where(i => i["KEY"].ToString() == key)
+                .FirstOrDefault();
 
-                if (item!=null)
-                {
-                    return item["VALUE"].ToString();
-                }
+            if (item != null)
+            {
+                return item["VALUE"].ToString();
+            }
             //}
 
             return string.Empty;
@@ -77,14 +77,14 @@ namespace BLL
             SPList list = web.Lists.TryGetList(targetList);
             //if (list != null)
             //{
-                SPListItem item = list.Items.Cast<SPListItem>()
-                    .Where(i => i["KEY"].ToString() == key)
-                    .FirstOrDefault();
+            SPListItem item = list.Items.Cast<SPListItem>()
+                .Where(i => i["KEY"].ToString() == key)
+                .FirstOrDefault();
 
-                if (item != null)
-                {
-                    return item["TEXT"].ToString();
-                }
+            if (item != null)
+            {
+                return item["TEXT"].ToString();
+            }
             //}
 
             return string.Empty;
@@ -150,6 +150,75 @@ namespace BLL
                     var result = ElasticEmail.EmailGenerator.ReportError(ex, web.Url);
                 }
 
+            }
+        }
+
+        public static bool IsRBREnabled(SPWeb web)
+        {
+                string proKEY = "RBR_ALLOWED";
+                string proEnabled = "Enabled";
+                string proDisabled = "Disabled";
+
+                string v = GetValue(web, proKEY);
+                if (v == proEnabled)
+                {
+                    return true;
+                }
+                else
+                {
+                    //dodaj nieaktywny klucz
+                    SPSecurity.RunWithElevatedPrivileges(delegate()
+                    {
+                        BLL.admSetup.Ensure(web, proKEY, proDisabled, "VALUE", "Przełącznik odblokowujący generowanie RBR");
+                    });
+
+                    return false;
+                }
+        }
+
+        public static bool IsRBEnabled(SPWeb web)
+        {
+            string proKEY = "RB_ALLOWED";
+            string proEnabled = "Enabled";
+            string proDisabled = "Disabled";
+
+            string v = GetValue(web, proKEY);
+            if (v == proEnabled)
+            {
+                return true;
+            }
+            else
+            {
+                //dodaj nieaktywny klucz
+                SPSecurity.RunWithElevatedPrivileges(delegate()
+                {
+                    BLL.admSetup.Ensure(web, proKEY, proDisabled, "VALUE", "Przełącznik odblokowujący generowanie RB");
+                });
+
+                return false;
+            }
+        }
+
+        public static bool IsKKDVATEnabled(SPWeb web)
+        {
+            string proKEY = "KKDVAT_ALLOWED";
+            string proEnabled = "Enabled";
+            string proDisabled = "Disabled";
+
+            string v = GetValue(web, proKEY);
+            if (v == proEnabled)
+            {
+                return true;
+            }
+            else
+            {
+                //dodaj nieaktywny klucz
+                SPSecurity.RunWithElevatedPrivileges(delegate()
+                {
+                    BLL.admSetup.Ensure(web, proKEY, proDisabled, "VALUE", "Przełącznik odblokowujący generowanie KKDVAT");
+                });
+
+                return false;
             }
         }
     }

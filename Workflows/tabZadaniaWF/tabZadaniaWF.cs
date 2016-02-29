@@ -512,22 +512,27 @@ namespace Workflows.tabZadaniaWF
 
                     BLL.tabKartyKontrolne.Update_VAT_Data(item);
 
-                    if (cmd.Equals(_CMD_ZATWIERDZ_I_ZAKONCZ)
-                        || cmd.Equals(_CMD_ZATWIERDZ_I_WYSLIJ))
+                    // opcojnalne generowanie formatek KKDVAT
+
+                    if (BLL.admSetup.IsKKDVATEnabled(item.Web))
                     {
-                        if (BLL.Tools.Get_Flag(item, "colVAT_eDeklaracja"))
+                        if (cmd.Equals(_CMD_ZATWIERDZ_I_ZAKONCZ)
+                            || cmd.Equals(_CMD_ZATWIERDZ_I_WYSLIJ))
                         {
-                            // wygeneruj zadanie KKDVAT
-                            try
+                            if (BLL.Tools.Get_Flag(item, "colVAT_eDeklaracja"))
                             {
-                                BLL.tabZadania.Create_KKDVAT(item.Web, item);
+                                // wygeneruj zadanie KKDVAT
+                                try
+                                {
+                                    BLL.tabZadania.Create_KKDVAT(item.Web, item);
+                                }
+                                catch (Exception ex)
+                                {
+                                    ElasticEmail.EmailGenerator.ReportError(ex, item.Web.Url.ToString());
+                                }
+
                             }
-                            catch (Exception ex)
-                            {
-                                ElasticEmail.EmailGenerator.ReportError(ex, item.Web.Url.ToString());
-                            }
-                            
-                        }
+                        } 
                     }
                 }
             }
