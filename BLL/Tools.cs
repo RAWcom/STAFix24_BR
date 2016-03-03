@@ -401,7 +401,7 @@ namespace BLL
 
         public static void Set_Flag(SPListItem item, string col, bool value)
         {
-                item[col] = value;
+            item[col] = value;
         }
 
         public static void Set_Value(SPListItem item, string col, double value)
@@ -417,12 +417,12 @@ namespace BLL
 
         public static string Format_Date(DateTime date)
         {
-            return date.ToString("yyyy-MM-dd",CultureInfo.InvariantCulture);
+            return date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
         }
 
         public static void Set_Date(SPListItem item, string col, DateTime dateTime)
         {
-            item[col] = dateTime;
+            if (item[col] != null) item[col] = dateTime;
         }
 
         public static string Format_Konto(string s)
@@ -436,7 +436,7 @@ namespace BLL
                     s = "1" + s;
                     string r = Convert.ToDecimal(s).ToString("### #### #### #### #### #### ####");
                     return r.Substring(1, r.Length - 1);
-                } 
+                }
             }
 
             return "nieprawidłowy numer rachunku";
@@ -491,7 +491,7 @@ namespace BLL
         public static bool Has_SelectedOptions(SPListItem item, string col)
         {
             SPFieldMultiChoiceValue v = Get_MutichoiceValue(item, col);
-            if (v.Count>0) return true;
+            if (v.Count > 0) return true;
             else return false;
         }
 
@@ -529,7 +529,7 @@ namespace BLL
 
         }
 
-        
+
         /// <summary>
         /// Wywołanie funkcji:
         /// DoWithRetry(DoSomething)
@@ -546,21 +546,21 @@ namespace BLL
 
             Debug.WriteLine("DoWithRetry activated");
 
-            while(true)
+            while (true)
             {
                 try
                 {
-                    action();  
+                    action();
                     break; // success!      
                 }
                 catch (Exception ex)
                 {
-                    if(--retryCount == 0)
-                        throw; 
+                    if (--retryCount == 0)
+                        throw;
                     else Thread.Sleep(sleepPeriod);
 
                     var r = ElasticEmail.EmailGenerator.ReportError(ex, "No of retries left: " + retryCount.ToString());
-                } 
+                }
             }
         }
     }

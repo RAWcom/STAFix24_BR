@@ -24,6 +24,7 @@ namespace BLL
 
                     string temp = string.Empty;
                     string footerTR = string.Empty;
+                    //Get_TemplateByKod(item.Web, "EMAIL_FOOTER_TR", out temp, out footerTR, false);
                     Get_TemplateByKod(item.Web, "EMAIL_FOOTER_TR", out temp, out footerTR, false);
 
                     if (string.IsNullOrEmpty(nadawcaEmail))
@@ -61,6 +62,12 @@ namespace BLL
 
                 footerTR = footerTR.Replace("___NAME___", op.Name);
                 footerTR = footerTR.Replace("___CONTACT___", string.Format(@"{0}<br>{1}", op.Email, op.Telefon));
+
+                // lub dla innego wariantu kodowania
+                footerTR = footerTR.Replace("[[ImieNazwisko]]", op.Name);
+                footerTR = footerTR.Replace("[[AdresEmail]]", op.Email);
+                footerTR = footerTR.Replace("[[Telefon]]", op.Telefon);
+
             }
             else
             {

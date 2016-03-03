@@ -61,7 +61,7 @@ namespace BLL
             return newItem.ID;
         }
 
-        private static SPListItem CreateMessageItem(SPWeb web, ref string nadawca, string odbiorca, string kopiaDla, bool KopiaDoNadawcy, bool KopiaDoBiura, string temat, string tresc, string trescHTML, DateTime planowanaDataNadania, int zadanieId, int klientId, int kartaKontrolnaId)
+        public static SPListItem CreateMessageItem(SPWeb web, ref string nadawca, string odbiorca, string kopiaDla, bool KopiaDoNadawcy, bool KopiaDoBiura, string temat, string tresc, string trescHTML, DateTime planowanaDataNadania, int zadanieId, int klientId, int kartaKontrolnaId)
         {
             SPList list = web.Lists.TryGetList(targetList);
             SPListItem newItem = list.AddItem();
@@ -238,7 +238,8 @@ namespace BLL
                 string trescHTML = string.Empty;
 
                 //string nadawca = BLL.Tools.Get_CurrentUser(item); - wymusza przypisanie stopki operatora na podstawie aktualnego adresu nadawcy
-                string nadawca = string.Empty; // wymusza przypisanie stopki operatora na podstawie aktualnie wybranego operatora
+
+                string nadawca = string.Empty; //wymusza aby testo czy trzeba dodać stopkę został wykonany w procedurze Get_TemplateByKod
 
                 //sprawdz czy nie nadpisać szablonu
 
@@ -258,16 +259,17 @@ namespace BLL
                 //sprawdź czy nie trzeba zastąpić markerów
                 if (_HasActiveFunction(funkcjeSzablonu,_FN_ZM))
                 {
-                    _ReplaceKnownMarkers(temat, klientId);
-                    _ReplaceKnownMarkers(trescHTML, klientId);
+                    temat = _ReplaceKnownMarkers(item.Web, temat, klientId);
+                    trescHTML = _ReplaceKnownMarkers(item.Web, trescHTML, klientId);
                 }
+
+                string odbiorca = BLL.tabKlienci.Get_EmailById(item.Web, klientId);
 
                 switch (cmd)
                 {
                     case "Wyślij":
-                    case "Wyślij z kopią do mnie":
-
-                        string odbiorca = BLL.tabKlienci.Get_EmailById(item.Web, klientId);
+                        KopiaDoNadawcy = false;
+                        KopiaDoBiura = false;
                         if (BLL.Tools.Is_ValidEmail(odbiorca))
                         {
                             BLL.tabWiadomosci.AddNew(item.Web, item, nadawca, odbiorca, kopiaDla, KopiaDoNadawcy, KopiaDoBiura, temat, tresc, trescHTML, BLL.Tools.Get_Date(item, "colPlanowanaDataNadania"), item.ID, klientId, 0, BLL.Models.Marker.WithAttachements);
@@ -275,6 +277,18 @@ namespace BLL
                             item.SystemUpdate();
                         }
                         break;
+
+                    case "Wyślij z kopią do mnie":
+                        KopiaDoNadawcy = true;
+                        KopiaDoBiura = false;
+                        if (BLL.Tools.Is_ValidEmail(odbiorca))
+                        {
+                            BLL.tabWiadomosci.AddNew(item.Web, item, nadawca, odbiorca, kopiaDla, KopiaDoNadawcy, KopiaDoBiura, temat, tresc, trescHTML, BLL.Tools.Get_Date(item, "colPlanowanaDataNadania"), item.ID, klientId, 0, BLL.Models.Marker.WithAttachements);
+                            BLL.Tools.Set_Text(item, "enumStatusZadania", "Wysyłka");
+                            item.SystemUpdate();
+                        }
+                        break;
+
                     case "Wyślij wiadomość testową":
 
                         temat = string.Format(@"::TEST::{0}", temat.ToString());
@@ -288,6 +302,7 @@ namespace BLL
                             BLL.tabWiadomosci.AddNew(item.Web, item, nadawca, odbiorca, kopiaDla, KopiaDoNadawcy, KopiaDoBiura, temat, tresc, trescHTML, new DateTime(), 0, 0, 0, Models.Marker.WithAttachements);
                         }
                         break;
+
                     default:
                         break;
                 }
@@ -342,9 +357,22 @@ namespace BLL
             return false;
         }
 
-        private static void _ReplaceKnownMarkers(string bodyHTML, int klientId)
+        private static string _ReplaceKnownMarkers(SPWeb web, string bodyHTML, int klientId)
         {
-            //todo: throw new NotImplementedException();
+            Models.Klient iok = new Models.Klient(web, klientId);
+            StringBuilder sb = new StringBuilder(bodyHTML);
+            sb.Replace("[[NazwaFirmy]]", iok.NazwaFirmy);
+            sb.Replace("[[Telefon]]", iok.Telefon);
+            sb.Replace("[[PelnaNazwaFirmy]]", iok.PelnaNazwaFirmy);
+            sb.Replace("[[OsobaDoKontaktu]]", iok.OsobaDoKontaktu);
+            sb.Replace("[[NIP]]", iok.NIP);
+            sb.Replace("[[Regon]]", iok.Regon);
+            sb.Replace("[[NazwaPrezentowana]]", iok.NazwaPrezentowana);
+            sb.Replace("[[Miejscowosc]]", iok.Miejscowosc);
+            sb.Replace("[[Email]]", iok.Email);
+            sb.Replace("[[KopiaDla]]", iok.KopiaDla);
+
+            return sb.ToString();
         }
 
         private static bool _IsAllowedToSendPODReminder(SPWeb web, int klientId)

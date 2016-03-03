@@ -60,7 +60,7 @@ namespace BLL
         public static SPWorkflow StartSiteWorkflow(SPSite site, string workflowName, string initParameters)
         {
             SPWorkflow wf = null;
-            
+
             using (SPWeb web = site.OpenWeb()) // get the web
             {
                 //find workflow to start
@@ -70,8 +70,8 @@ namespace BLL
 
                 //this is the call to start the workflow
                 //result = site.WorkflowManager.StartWorkflow(null, assoc, initParameters.ToString() , SPWorkflowRunOptions.SynchronousAllowPostpone);
-                wf = site.WorkflowManager.StartWorkflow(site, assoc, initParameters.ToString(),SPWorkflowRunOptions.SynchronousAllowPostpone);
-                
+                wf = site.WorkflowManager.StartWorkflow(site, assoc, initParameters.ToString(), SPWorkflowRunOptions.SynchronousAllowPostpone);
+
                 if (!wf.InternalState.ToString().Equals("Completed"))
                 {
                     ElasticEmail.EmailGenerator.SendMail(string.Format(@"WorkflowManager({0})", site.RootWeb.ToString()), "InternalState=" + wf.InternalState.ToString());
@@ -134,7 +134,6 @@ namespace BLL
             nodeToChange.SetValue(variableValue);
             return associationDataXml.ToString();
         }
-
 
         public static void EnsureWorkflowAssociation(SPList list, string workflowTemplateName, string associationName, bool allowManual, bool startCreate, bool startUpdate)
         {
@@ -204,6 +203,6 @@ namespace BLL
             list.Update();
             return list;
         }
-    
+
     }
 }
