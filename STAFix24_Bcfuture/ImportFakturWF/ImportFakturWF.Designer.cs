@@ -42,23 +42,28 @@ namespace STAFix24_Bcfuture.ImportFakturWF
             System.Workflow.Activities.CodeCondition codecondition4 = new System.Workflow.Activities.CodeCondition();
             System.Workflow.ComponentModel.ActivityBind activitybind11 = new System.Workflow.ComponentModel.ActivityBind();
             System.Workflow.ComponentModel.ActivityBind activitybind10 = new System.Workflow.ComponentModel.ActivityBind();
+            this.ErrorHandler2 = new System.Workflow.Activities.CodeActivity();
+            this.faultHandlerActivity3 = new System.Workflow.ComponentModel.FaultHandlerActivity();
+            this.faultHandlersActivity3 = new System.Workflow.ComponentModel.FaultHandlersActivity();
             this.Remove_ZaimportowaneFaktury = new System.Workflow.Activities.CodeActivity();
             this.Add_FakturyDoRejestru = new System.Workflow.Activities.CodeActivity();
             this.Create_Message = new System.Workflow.Activities.CodeActivity();
             this.Select_FaturyKlienta = new System.Workflow.Activities.CodeActivity();
-            this.Update_FakturaStatus = new System.Workflow.Activities.CodeActivity();
+            this.SetStatus_Nowy = new System.Workflow.Activities.CodeActivity();
             this.ErrorHandler1 = new System.Workflow.Activities.CodeActivity();
             this.PrzygotujWiadomosc = new System.Workflow.Activities.SequenceActivity();
             this.faultHandlerActivity2 = new System.Workflow.ComponentModel.FaultHandlerActivity();
             this.Weryfikcja = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
             this.whileActivity2 = new System.Workflow.Activities.WhileActivity();
             this.Get_KlientEnumerator = new System.Workflow.Activities.CodeActivity();
+            this.Select_Rozliczenia = new System.Workflow.Activities.CodeActivity();
             this.Select_ListaKlientow = new System.Workflow.Activities.CodeActivity();
             this.Wysyłka = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
             this.faultHandlersActivity2 = new System.Workflow.ComponentModel.FaultHandlersActivity();
             this.Update_Faktura = new System.Workflow.Activities.CodeActivity();
             this.Try_TerminPłatności = new System.Workflow.Activities.CodeActivity();
             this.Try_Dokument = new System.Workflow.Activities.CodeActivity();
+            this.Try_Okres = new System.Workflow.Activities.CodeActivity();
             this.Try_Klient = new System.Workflow.Activities.CodeActivity();
             this.Set_Faktura = new System.Workflow.Activities.CodeActivity();
             this.elseMode_Weryfikacja = new System.Workflow.Activities.IfElseBranchActivity();
@@ -73,6 +78,7 @@ namespace STAFix24_Bcfuture.ImportFakturWF
             this.logErrorMessage = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
             this.ErrorHandler = new System.Workflow.Activities.CodeActivity();
             this.LogErrCT = new Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity();
+            this.SetStatus_Zakonczone = new System.Workflow.Activities.CodeActivity();
             this.Send_Report = new Microsoft.SharePoint.WorkflowActions.SendEmail();
             this.ManageImportFaktur = new System.Workflow.Activities.SequenceActivity();
             this.Init_Report = new System.Workflow.Activities.CodeActivity();
@@ -85,15 +91,31 @@ namespace STAFix24_Bcfuture.ImportFakturWF
             this.Test_CT = new System.Workflow.Activities.IfElseActivity();
             this.onWorkflowActivated1 = new Microsoft.SharePoint.WorkflowActions.OnWorkflowActivated();
             // 
+            // ErrorHandler2
+            // 
+            this.ErrorHandler2.Name = "ErrorHandler2";
+            this.ErrorHandler2.ExecuteCode += new System.EventHandler(this.ErrorHandler_ExecuteCode);
+            // 
+            // faultHandlerActivity3
+            // 
+            this.faultHandlerActivity3.Activities.Add(this.ErrorHandler2);
+            this.faultHandlerActivity3.FaultType = typeof(System.Exception);
+            this.faultHandlerActivity3.Name = "faultHandlerActivity3";
+            // 
+            // faultHandlersActivity3
+            // 
+            this.faultHandlersActivity3.Activities.Add(this.faultHandlerActivity3);
+            this.faultHandlersActivity3.Name = "faultHandlersActivity3";
+            // 
             // Remove_ZaimportowaneFaktury
             // 
-            this.Remove_ZaimportowaneFaktury.Enabled = false;
             this.Remove_ZaimportowaneFaktury.Name = "Remove_ZaimportowaneFaktury";
+            this.Remove_ZaimportowaneFaktury.ExecuteCode += new System.EventHandler(this.Remove_ZaimportowaneFaktury_ExecuteCode);
             // 
             // Add_FakturyDoRejestru
             // 
-            this.Add_FakturyDoRejestru.Enabled = false;
             this.Add_FakturyDoRejestru.Name = "Add_FakturyDoRejestru";
+            this.Add_FakturyDoRejestru.ExecuteCode += new System.EventHandler(this.Add_FakturyDoRejestru_ExecuteCode);
             // 
             // Create_Message
             // 
@@ -105,10 +127,10 @@ namespace STAFix24_Bcfuture.ImportFakturWF
             this.Select_FaturyKlienta.Name = "Select_FaturyKlienta";
             this.Select_FaturyKlienta.ExecuteCode += new System.EventHandler(this.Select_FakturyKlienta_ExecuteCode);
             // 
-            // Update_FakturaStatus
+            // SetStatus_Nowy
             // 
-            this.Update_FakturaStatus.Name = "Update_FakturaStatus";
-            this.Update_FakturaStatus.ExecuteCode += new System.EventHandler(this.Update_FakturaStatus_ExecuteCode);
+            this.SetStatus_Nowy.Name = "SetStatus_Nowy";
+            this.SetStatus_Nowy.ExecuteCode += new System.EventHandler(this.Update_FakturaStatus_ExecuteCode);
             // 
             // ErrorHandler1
             // 
@@ -121,12 +143,13 @@ namespace STAFix24_Bcfuture.ImportFakturWF
             this.PrzygotujWiadomosc.Activities.Add(this.Create_Message);
             this.PrzygotujWiadomosc.Activities.Add(this.Add_FakturyDoRejestru);
             this.PrzygotujWiadomosc.Activities.Add(this.Remove_ZaimportowaneFaktury);
+            this.PrzygotujWiadomosc.Activities.Add(this.faultHandlersActivity3);
             this.PrzygotujWiadomosc.Name = "PrzygotujWiadomosc";
             // 
             // faultHandlerActivity2
             // 
             this.faultHandlerActivity2.Activities.Add(this.ErrorHandler1);
-            this.faultHandlerActivity2.Activities.Add(this.Update_FakturaStatus);
+            this.faultHandlerActivity2.Activities.Add(this.SetStatus_Nowy);
             this.faultHandlerActivity2.FaultType = typeof(System.Exception);
             this.faultHandlerActivity2.Name = "faultHandlerActivity2";
             // 
@@ -151,6 +174,11 @@ namespace STAFix24_Bcfuture.ImportFakturWF
             // 
             this.Get_KlientEnumerator.Name = "Get_KlientEnumerator";
             this.Get_KlientEnumerator.ExecuteCode += new System.EventHandler(this.Get_KlientEnumerator_ExecuteCode);
+            // 
+            // Select_Rozliczenia
+            // 
+            this.Select_Rozliczenia.Name = "Select_Rozliczenia";
+            this.Select_Rozliczenia.ExecuteCode += new System.EventHandler(this.Select_Rozliczenia_ExecuteCode);
             // 
             // Select_ListaKlientow
             // 
@@ -187,6 +215,11 @@ namespace STAFix24_Bcfuture.ImportFakturWF
             this.Try_Dokument.Name = "Try_Dokument";
             this.Try_Dokument.ExecuteCode += new System.EventHandler(this.Try_Dokument_ExecuteCode);
             // 
+            // Try_Okres
+            // 
+            this.Try_Okres.Name = "Try_Okres";
+            this.Try_Okres.ExecuteCode += new System.EventHandler(this.Try_Okres_ExecuteCode);
+            // 
             // Try_Klient
             // 
             this.Try_Klient.Name = "Try_Klient";
@@ -206,6 +239,7 @@ namespace STAFix24_Bcfuture.ImportFakturWF
             // 
             this.ifMode_Wysylka.Activities.Add(this.Wysyłka);
             this.ifMode_Wysylka.Activities.Add(this.Select_ListaKlientow);
+            this.ifMode_Wysylka.Activities.Add(this.Select_Rozliczenia);
             this.ifMode_Wysylka.Activities.Add(this.Get_KlientEnumerator);
             this.ifMode_Wysylka.Activities.Add(this.whileActivity2);
             codecondition2.Condition += new System.EventHandler<System.Workflow.Activities.ConditionalEventArgs>(this.isMode_Wysylka);
@@ -216,6 +250,7 @@ namespace STAFix24_Bcfuture.ImportFakturWF
             // 
             this.ObsługaFaktury.Activities.Add(this.Set_Faktura);
             this.ObsługaFaktury.Activities.Add(this.Try_Klient);
+            this.ObsługaFaktury.Activities.Add(this.Try_Okres);
             this.ObsługaFaktury.Activities.Add(this.Try_Dokument);
             this.ObsługaFaktury.Activities.Add(this.Try_TerminPłatności);
             this.ObsługaFaktury.Activities.Add(this.Update_Faktura);
@@ -295,6 +330,11 @@ namespace STAFix24_Bcfuture.ImportFakturWF
             this.LogErrCT.UserId = -1;
             this.LogErrCT.SetBinding(Microsoft.SharePoint.WorkflowActions.LogToHistoryListActivity.HistoryOutcomeProperty, ((System.Workflow.ComponentModel.ActivityBind)(activitybind4)));
             // 
+            // SetStatus_Zakonczone
+            // 
+            this.SetStatus_Zakonczone.Name = "SetStatus_Zakonczone";
+            this.SetStatus_Zakonczone.ExecuteCode += new System.EventHandler(this.SetStatus_Zakonczone_ExecuteCode);
+            // 
             // Send_Report
             // 
             this.Send_Report.BCC = null;
@@ -361,6 +401,7 @@ namespace STAFix24_Bcfuture.ImportFakturWF
             this.ImportFaktur.Activities.Add(this.Init_Report);
             this.ImportFaktur.Activities.Add(this.ManageImportFaktur);
             this.ImportFaktur.Activities.Add(this.Send_Report);
+            this.ImportFaktur.Activities.Add(this.SetStatus_Zakonczone);
             codecondition4.Condition += new System.EventHandler<System.Workflow.Activities.ConditionalEventArgs>(this.isImportFaktur);
             this.ImportFaktur.Condition = codecondition4;
             this.ImportFaktur.Name = "ImportFaktur";
@@ -406,11 +447,23 @@ namespace STAFix24_Bcfuture.ImportFakturWF
 
         #endregion
 
+        private CodeActivity Try_Okres;
+
+        private CodeActivity SetStatus_Zakonczone;
+
+        private CodeActivity Select_Rozliczenia;
+
+        private CodeActivity ErrorHandler2;
+
+        private FaultHandlerActivity faultHandlerActivity3;
+
+        private FaultHandlersActivity faultHandlersActivity3;
+
         private CancellationHandlerActivity cancellationHandlerActivity1;
 
         private CodeActivity Get_KlientEnumerator;
 
-        private CodeActivity Update_FakturaStatus;
+        private CodeActivity SetStatus_Nowy;
 
         private CodeActivity ErrorHandler1;
 
@@ -489,6 +542,12 @@ namespace STAFix24_Bcfuture.ImportFakturWF
         private IfElseActivity Test_CT;
 
         private Microsoft.SharePoint.WorkflowActions.OnWorkflowActivated onWorkflowActivated1;
+
+
+
+
+
+
 
 
 

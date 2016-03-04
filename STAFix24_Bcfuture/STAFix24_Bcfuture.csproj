@@ -73,6 +73,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="CustomActions\ImportujFaktury\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{69252a7b-e3fd-4c31-8ba4-25b4a9fe9a6f}</SharePointProjectItemId>
+    </None>
     <None Include="Features\SiteFeatures\SiteFeatures.feature">
       <FeatureId>{7cedfa8f-213d-4ebc-9dda-db5aabe56059}</FeatureId>
     </None>
@@ -91,6 +94,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CustomActions\ImportujFaktury\Elements.xml" />
     <Content Include="Features\SiteFeatures\SiteFeatures.Template.xml">
       <DependentUpon>SiteFeatures.feature</DependentUpon>
     </Content>
@@ -103,6 +107,7 @@
       <Name>BLL</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\SharePointTools\Microsoft.VisualStudio.SharePoint.targets" />
 </Project>

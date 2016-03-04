@@ -65,15 +65,22 @@ namespace STAFix24_Bcfuture.ImportFakturWF
         private ArrayList fakturyKlineta;
         private static string targetList = "Wiadomości";
         private string numerKontaBankowego;
-
-
+        private string _tabRozliczenieGotowkowe = "Rejestr płatności";
+        private SPList rozliczenia;
+        private int numerWiadomosci;
+        private DateTime targetDate;
+        private int targetOkresId = 0;
+        private string _tabOkresy = "Okresy";
+        private string _STATUS_ZLECENIA_ZAKONCZONY = "Zakończony";
+        private string _STATUS_ZLECENIA_ANULOWANY = "Anulowany";
+        private StringBuilder sbErr;
 
         private void onWorkflowActivated1_Invoked(object sender, ExternalDataEventArgs e)
         {
             item = workflowProperties.Item;
             logMessage_HistoryOutcome = item.ContentType.Name;
 
-            
+
         }
 
         private void isImportFaktur(object sender, ConditionalEventArgs e)
@@ -136,10 +143,10 @@ namespace STAFix24_Bcfuture.ImportFakturWF
             msgSubject = "Import faktur zakończony";
 
             //msgBody
-            if (sb.Length > 0) msgBody = "<h3>Raport z importu</h3>" + string.Format("<ol>{0}</ol>", sb.ToString());
+            if (sb != null && sb.Length > 0) msgBody = "<h3>Raport z importu</h3>" + string.Format("<ol>{0}</ol>", sb.ToString());
             else msgBody = string.Empty;
 
-            if (sbRpt.Length > 0) msgBody = msgBody + "<h3>Lista klientów dla których przygotowano wiadomość</h3>" + string.Format("<ol>{0}</ol>", sbRpt.ToString());
+            if (sbRpt != null && sbRpt.Length > 0) msgBody = msgBody + "<h3>Lista klientów dla których przygotowano wiadomość</h3>" + string.Format("<ol>{0}</ol>", sbRpt.ToString());
 
             //msgHeaders
             //TODO:
@@ -162,19 +169,22 @@ namespace STAFix24_Bcfuture.ImportFakturWF
             foundKlient = null;
             foundDokument = null;
 
-            BLL.Tools.Set_Index(faktura, "selKlient", 0);
+            //BLL.Tools.Set_Index(faktura, "selKlient", 0);
             //BLL.Tools.Set_Date(faktura, "colBR_TerminPlatnosci", new DateTime());
             //faktura["colBR_TerminPlatnosci"] = new DateTime();
             BLL.Tools.Set_Value(faktura, "_DokumentId", 0);
             BLL.Tools.Set_Text(faktura, "_PowiazanyDokument", string.Empty);
             BLL.Tools.Set_Text(faktura, "_Uwagi", string.Empty);
             BLL.Tools.Set_Text(faktura, "enumStatusImportu", _STATUS_NOWY);
+
+            sbErr = new StringBuilder();
         }
 
 
 
         private void Try_Klient_ExecuteCode(object sender, EventArgs e)
         {
+            foundKlient = null;
 
             string kontrahent = BLL.Tools.Get_Text(faktura, "_Kontrahent");
 
@@ -202,25 +212,57 @@ namespace STAFix24_Bcfuture.ImportFakturWF
                     }
                 }
             }
+
+            if (foundKlient != null)
+            {
+                BLL.Tools.Set_Index(faktura, "selKlient", foundKlient.ID);
+                faktura["selKlient"] = foundKlient.ID;
+                Debug.WriteLine("Ustawiony ID klienta:" + foundKlient.ID.ToString());
+                Debug.WriteLine(BLL.Tools.Get_LookupId(faktura, "selKlient"));
+            }
+            else
+            {
+                sbErr.AppendFormat("<li>{0}</li>", "Nie znaleziono powiązanej kartoteki klienta");
+            }
+        }
+
+        private void Try_Okres_ExecuteCode(object sender, EventArgs e)
+        {
+            DateTime dataWystawienia = BLL.Tools.Get_Date(faktura, "colBR_DataWystawieniaFaktury");
+            int okresId = Get_OkresId(dataWystawienia);
+            if (okresId > 0)
+            {
+                BLL.Tools.Set_Index(faktura, "selOkres", okresId);
+            }
+            else
+            {
+                //report error
+                sbErr.AppendFormat("<li>Dla daty {0} nie został zdefiniowany okres rozliczeniowy</li>", BLL.Tools.Format_Date(dataWystawienia));
+            }
         }
 
         private void Try_Dokument_ExecuteCode(object sender, EventArgs e)
         {
+            string numerFaktury = BLL.Tools.Get_Text(faktura, "colBR_NumerFaktury");
+            numerFaktury = Convert_NumerFaktury(numerFaktury);
+            Debug.WriteLine("numerFaktury:" + numerFaktury);
 
-            if (foundKlient != null)
+            foreach (SPListItem dokument in aObrazyFaktur)
             {
-                string numerFaktury = BLL.Tools.Get_Text(faktura, "colBR_NumerFaktury");
-                numerFaktury = Convert_NumerFaktury(numerFaktury);
-                Debug.WriteLine("numerFaktury:" + numerFaktury);
-
-                foreach (SPListItem dokument in aObrazyFaktur)
+                if (BLL.Tools.Get_Text(dokument, "LinkFilename").Trim().ToUpperInvariant().StartsWith(numerFaktury))
                 {
-                    if (BLL.Tools.Get_Text(dokument, "LinkFilename").Trim().ToUpperInvariant().StartsWith(numerFaktury))
-                    {
-                        foundDokument = dokument;
-                        break;
-                    }
+                    foundDokument = dokument;
+                    break;
                 }
+            }
+
+
+            //report errors
+            if (foundDokument == null) sbErr.AppendFormat("<li>{0}</li>", "Brak załącznika");
+            else
+            {
+                BLL.Tools.Set_Value(faktura, "_DokumentId", foundDokument.ID);
+                BLL.Tools.Set_Text(faktura, "_PowiazanyDokument", foundDokument.Name);
             }
         }
 
@@ -239,17 +281,31 @@ namespace STAFix24_Bcfuture.ImportFakturWF
         {
 
             DateTime dataWystawienia = BLL.Tools.Get_Date(faktura, "colBR_DataWystawieniaFaktury");
-            terminPlatnosci = dataWystawienia != null ? dataWystawienia : DateTime.Today;
-
-            if (foundKlient != null)
+            if (foundKlient != null && dataWystawienia != null)
             {
                 int terminPlatnosciId = BLL.Tools.Get_LookupId(foundKlient, "selTerminPlatnosci");
-                if (terminPlatnosciId > 0 && dataWystawienia != null)
+                int ld = int.Parse(Get_TerminPlatnosci_LiczbaDni(terminPlatnosciId).ToString());
+
+                if (terminPlatnosciId > 0 && ld > 0)
                 {
-                    int ld = int.Parse(Get_TerminPlatnosci_LiczbaDni(terminPlatnosciId).ToString());
                     terminPlatnosci = dataWystawienia.AddDays(ld);
                 }
+                else
+                {
+                    // jeżeli termin płatności jest nie ustawiony lub rozliczenie gotówkowe wtedy przyjmij + 10 dni
+                    terminPlatnosci = terminPlatnosci.AddDays(10);
+                }
+
+                faktura["colBR_TerminPlatnosci"] = terminPlatnosci;
             }
+
+            //report error
+            if (dataWystawienia == null)
+                sbErr.AppendFormat("<li>{0}</li>", "Brak daty wystawienia faktury");
+
+            if (terminPlatnosci == null || terminPlatnosci == new DateTime())
+                sbErr.AppendFormat("<li>{0}</li>", "Problem z określeniem terminu płatności faktury");
+
 
         }
 
@@ -271,35 +327,9 @@ namespace STAFix24_Bcfuture.ImportFakturWF
 
         private void Update_Faktura_ExecuteCode(object sender, EventArgs e)
         {
-            StringBuilder sbErr = new StringBuilder();
-
-            if (foundKlient == null) sbErr.AppendFormat("<li>{0}</li>", "Nie znaleziono powiązanej kartoteki klienta");
-            else
-            {
-                BLL.Tools.Set_Index(faktura, "selKlient", foundKlient.ID);
-            }
-            if (foundDokument == null) sbErr.AppendFormat("<li>{0}</li>", "Brak załącznika");
-            else
-            {
-                BLL.Tools.Set_Value(faktura, "_DokumentId", foundDokument.ID);
-                BLL.Tools.Set_Text(faktura, "_PowiazanyDokument", foundDokument.Name);
-            }
-            if (terminPlatnosci == null)
-                sbErr.AppendFormat("<li>{0}</li>", "Problem z wyliczeniem terminu płatności");
-            else
-            {
-                if (terminPlatnosci <= DateTime.Today.AddMonths(-2))
-                    sbErr.AppendFormat("<li>Termin płatności nie może być wcześniejszy niż {0}</li>", BLL.Tools.Format_Date(DateTime.Today.AddMonths(-2)));
-                else
-                {
-                    BLL.Tools.Set_Date(faktura, "colBR_TerminPlatnosci", terminPlatnosci);
-                }
-            }
-
-            if (foundKlient != null && foundDokument != null && terminPlatnosci != null)
+            if (string.IsNullOrEmpty(sbErr.ToString()) && foundKlient != null && foundDokument != null)
             {
                 BLL.Tools.Set_Text(faktura, "_Uwagi", string.Format("{0} OK", DateTime.Now.ToString()));
-
                 BLL.Tools.Set_Text(faktura, "enumStatusImportu", _STATUS_POWIAZANY);
             }
             else
@@ -329,6 +359,8 @@ namespace STAFix24_Bcfuture.ImportFakturWF
 
                 ElasticEmail.EmailGenerator.ReportErrorFromWorkflow(workflowProperties, fa.Fault.Message, fa.Fault.StackTrace);
 
+                BLL.Tools.Set_Text(item, "enumStatusZlecenia", _STATUS_ZLECENIA_ANULOWANY);
+                item.SystemUpdate();
             }
         }
 
@@ -345,11 +377,14 @@ namespace STAFix24_Bcfuture.ImportFakturWF
 
         private void Select_ListaKlientow_ExecuteCode(object sender, EventArgs e)
         {
+
             numerKontaBankowego = BLL.admSetup.GetValue(item.Web, "BR_KONTO");
-            
+
             sbRpt = new StringBuilder();
 
             distinctKlienci = new ArrayList();
+
+            aFaktury = GetListItems(_tabFaktury); // odświerzenie listy
 
             foreach (SPListItem faktura in aFaktury)
             {
@@ -357,8 +392,10 @@ namespace STAFix24_Bcfuture.ImportFakturWF
                 {
                     int klientId = BLL.Tools.Get_LookupId(faktura, "selKlient");
 
+
                     if (!distinctKlienci.Contains(klientId))
                     {
+
                         distinctKlienci.Add(klientId);
                         sbRpt.AppendFormat("<li>{0}</li>", BLL.Tools.Get_LookupValue(faktura, "selKlient"));
                     }
@@ -383,16 +420,19 @@ namespace STAFix24_Bcfuture.ImportFakturWF
 
             currentKlientId = (int)myEnum.Current;
 
-            foreach (SPListItem faktura in aFaktury)
+            if (currentKlientId > 0)
             {
-                int klinetId = BLL.Tools.Get_LookupId(faktura, "selKlient");
-                if (distinctKlienci.Contains(klinetId))
+                foreach (SPListItem faktura in aFaktury)
                 {
-                    if (klinetId.Equals(currentKlientId))
+                    int klinetId = BLL.Tools.Get_LookupId(faktura, "selKlient");
+                    if (distinctKlienci.Contains(klinetId))
                     {
-                        if (BLL.Tools.Get_Text(faktura, "enumStatusImportu").Equals(_STATUS_POWIAZANY))
+                        if (klinetId.Equals(currentKlientId))
                         {
-                            fakturyKlineta.Add(faktura);
+                            if (BLL.Tools.Get_Text(faktura, "enumStatusImportu").Equals(_STATUS_POWIAZANY))
+                            {
+                                fakturyKlineta.Add(faktura);
+                            }
                         }
                     }
                 }
@@ -401,6 +441,8 @@ namespace STAFix24_Bcfuture.ImportFakturWF
 
         private void Create_Message_ExecuteCode(object sender, EventArgs e)
         {
+
+            if (fakturyKlineta == null || fakturyKlineta.Count == 0) return;
 
             // przygotuj wiadomość
             string temat = string.Empty;
@@ -435,6 +477,10 @@ namespace STAFix24_Bcfuture.ImportFakturWF
 
             BLL.dicSzablonyKomunikacji.Get_TemplateByKod(item, "INVOICE_LIST_TEMPLATE.Include", out temat, out trescHTML, nadawca);
 
+            BLL.Models.Klient iok = new BLL.Models.Klient(item.Web, currentKlientId);
+
+            temat = temat + " : " + iok.NazwaPrezentowana;
+
             StringBuilder sbBody = new StringBuilder(trescHTML);
             sbBody.Replace("[[TABLE_ROW]]", sb.ToString());
 
@@ -448,31 +494,58 @@ namespace STAFix24_Bcfuture.ImportFakturWF
             bool KopiaDoNadawcy = true;
             bool KopiaDoBiura = false;
 
+            DateTime planowanyTerminNadania = DateTime.Now.AddHours(1);
+
             if (BLL.Tools.IsValidEmail(odbiorca))
             {
-                SPListItem newItem = CreateMessageItem(item.Web, ref nadawca, odbiorca, kopiaDla, KopiaDoNadawcy, KopiaDoBiura, temat, tresc, trescHTML, new DateTime(), 0, currentKlientId, 0);
+                SPListItem newItem = CreateMessageItem(item.Web, ref nadawca, odbiorca, kopiaDla, KopiaDoNadawcy, KopiaDoBiura, temat, tresc, trescHTML, planowanyTerminNadania, 0, currentKlientId, 0);
 
-                ////obsługa wysyłki załączników jeżeli Item został przekazany w wywołaniu procedury
-                //if (item != null)
-                //{
-                //    for (int attachmentIndex = 0; attachmentIndex < item.Attachments.Count; attachmentIndex++)
-                //    {
-                //        string url = item.Attachments.UrlPrefix + item.Attachments[attachmentIndex];
-                //        SPFile file = item.ParentList.ParentWeb.GetFile(url);
+                // dołącz załączniki w formie plików faktur skojarzonych z listą.
 
-                //        if (file.Exists)
-                //        {
+                foreach (SPListItem faktura in fakturyKlineta)
+                {
+                    int dokumentId = (int)BLL.Tools.Get_Value(faktura, "_DokumentId");
+                    SPListItem doc = Get_DocumentById(dokumentId);
+                    if (doc != null)
+                    {
+                        string url = doc.Url;
+                        SPFile file = item.ParentList.ParentWeb.GetFile(url);
 
-                //                    BLL.Tools.Copy_Attachement(newItem, file);
-                //        }
-                //    }
-                //}
+                        if (file.Exists)
+                        {
+
+                            Copy_Attachement(newItem, file);
+                        }
+                    }
+                }
 
                 newItem.SystemUpdate();
 
-                //BLL.tabWiadomosci.AddNew(item.Web, item, nadawca, odbiorca, kopiaDla, KopiaDoNadawcy, KopiaDoBiura, temat, tresc, trescHTML, BLL.Tools.Get_Date(item, "colPlanowanaDataNadania"), item.ID, currentKlientId, 0, BLL.Models.Marker.WithAttachements);
+                numerWiadomosci = newItem.ID;
+            }
+        }
+
+        private void Copy_Attachement(SPListItem newItem, SPFile file)
+        {
+            int bufferSize = 20480;
+            byte[] byteBuffer = new byte[bufferSize];
+            byteBuffer = file.OpenBinary();
+            newItem.Attachments.Add(file.Name, byteBuffer);
+        }
+
+        private SPListItem Get_DocumentById(int dokumentId)
+        {
+            SPList doclist = item.Web.Lists.TryGetList(_libFaktury);
+            if (doclist != null)
+            {
+                SPListItem docItem = doclist.GetItemById(dokumentId);
+                if (docItem != null)
+                {
+                    return docItem;
+                }
             }
 
+            return null;
         }
 
         private static SPListItem CreateMessageItem(SPWeb web, ref string nadawca, string odbiorca, string kopiaDla, bool KopiaDoNadawcy, bool KopiaDoBiura, string temat, string tresc, string trescHTML, DateTime planowanaDataNadania, int zadanieId, int klientId, int kartaKontrolnaId)
@@ -503,9 +576,147 @@ namespace STAFix24_Bcfuture.ImportFakturWF
             if (klientId > 0) newItem["selKlient_NazwaSkrocona"] = klientId;
 
             if (kartaKontrolnaId > 0) newItem["_KartaKontrolnaId"] = kartaKontrolnaId;
+
             return newItem;
         }
 
+        private void Add_FakturyDoRejestru_ExecuteCode(object sender, EventArgs e)
+        {
+            if (fakturyKlineta == null || fakturyKlineta.Count == 0) return;
 
+            // get rozliczenia klienta
+
+            Array rozliczeniaKlienta = Get_RozliczeniaKlienta(currentKlientId);
+
+            foreach (SPListItem faktura in fakturyKlineta)
+            {
+                string numerFaktury = BLL.Tools.Get_Text(faktura, "colBR_NumerFaktury");
+
+                bool found = false;
+                if (rozliczeniaKlienta != null)
+                {
+                    foreach (SPListItem rozliczenie in rozliczeniaKlienta)
+                    {
+                        if (BLL.Tools.Get_Text(rozliczenie, "colBR_NumerFaktury").Equals(numerFaktury))
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!found)
+                {
+                    // dodaj nowy rekord do listy rozliczeń
+                    SPListItem newItem;
+                    if (rozliczenia != null)
+                    {
+                        newItem = rozliczenia.AddItem();
+                    }
+                    else
+                    {
+                        newItem = item.Web.Lists.TryGetList(_tabRozliczenieGotowkowe).Items.Add();
+                    }
+
+                    BLL.Tools.Set_Index(newItem, "selKlient", currentKlientId);
+
+
+                    BLL.Tools.Set_Index(newItem, "selOkres", BLL.Tools.Get_LookupId(faktura, "selOkres"));
+
+
+                    BLL.Tools.Set_Text(newItem, "Title", "Faktura za obsługę");
+                    BLL.Tools.Set_Text(newItem, "colBR_NumerFaktury", BLL.Tools.Get_Text(faktura, "colBR_NumerFaktury"));
+
+                    newItem["colBR_DataWystawieniaFaktury"] = BLL.Tools.Get_Date(faktura, "colBR_DataWystawieniaFaktury");
+                    newItem["colBR_TerminPlatnosci"] = BLL.Tools.Get_Date(faktura, "colBR_TerminPlatnosci");
+
+                    BLL.Tools.Set_Value(newItem, "colDoZaplaty", BLL.Tools.Get_Value(faktura, "colBR_WartoscDoZaplaty"));
+
+                    // w notatce można dać numer wiadomości w której faktura wyszła
+                    if (numerWiadomosci > 0)
+                    {
+                        string n = string.Format("wiadomość#{0}", numerWiadomosci.ToString());
+                        BLL.Tools.Set_Text(newItem, "colNotatka", n);
+                    }
+
+                    newItem.Update();
+
+                }
+            }
+        }
+
+        private int Get_OkresId(DateTime date)
+        {
+            int result = 0;
+
+            if (targetDate != null && targetDate == date)
+            {
+                return targetOkresId;
+            }
+            else
+            {
+                SPList okresy = item.Web.Lists.TryGetList(_tabOkresy);
+                SPListItem o = okresy.Items.Cast<SPListItem>()
+                    .Where(i => BLL.Tools.Get_Date(i, "colDataRozpoczecia") <= date)
+                    .Where(i => BLL.Tools.Get_Date(i, "colDataZakonczenia") >= date)
+                    .FirstOrDefault();
+
+                if (o != null)
+                {
+                    result = o.ID;
+                    targetOkresId = o.ID;
+                    targetDate = date;
+                }
+            }
+
+            return result;
+        }
+
+        private Array Get_RozliczeniaKlienta(int currentKlientId)
+        {
+            if (rozliczenia != null)
+            {
+                return rozliczenia.Items.Cast<SPListItem>()
+                    .Where(i => BLL.Tools.Get_LookupId(i, "selKlient").Equals(currentKlientId))
+                    .ToArray();
+            }
+
+            return null;
+        }
+
+        private void Select_Rozliczenia_ExecuteCode(object sender, EventArgs e)
+        {
+            rozliczenia = item.Web.Lists.TryGetList(_tabRozliczenieGotowkowe);
+        }
+
+        private void SetStatus_Zakonczone_ExecuteCode(object sender, EventArgs e)
+        {
+            BLL.Tools.Set_Text(item, "enumStatusZlecenia", _STATUS_ZLECENIA_ZAKONCZONY);
+            item.Update();
+        }
+
+        private void Remove_ZaimportowaneFaktury_ExecuteCode(object sender, EventArgs e)
+        {
+            SPList faktury = item.Web.Lists.TryGetList(_tabFaktury);
+            SPList dokumenty = item.Web.Lists.TryGetList(_libFaktury);
+
+            foreach (SPListItem fk in fakturyKlineta)
+            {
+                int fakId = fk.ID;
+                if (fakId > 0)
+                {
+                    SPListItem f = faktury.Items.GetItemById(fk.ID);
+                    if (f != null) f.Delete();
+                }
+
+
+                int docId = (int)BLL.Tools.Get_Value(fk, "_DokumentId");
+                if (docId > 0)
+                {
+                    SPListItem d = dokumenty.Items.GetItemById(docId);
+                    if (d != null) d.Delete();
+                }
+            }
+        }
     }
 }
