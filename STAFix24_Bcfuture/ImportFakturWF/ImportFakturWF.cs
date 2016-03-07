@@ -178,6 +178,8 @@ namespace STAFix24_Bcfuture.ImportFakturWF
             BLL.Tools.Set_Text(faktura, "enumStatusImportu", _STATUS_NOWY);
 
             sbErr = new StringBuilder();
+
+            logRecord_HistoryOutcome = faktura.ID.ToString();
         }
 
 
@@ -228,7 +230,9 @@ namespace STAFix24_Bcfuture.ImportFakturWF
 
         private void Try_Okres_ExecuteCode(object sender, EventArgs e)
         {
-            DateTime dataWystawienia = BLL.Tools.Get_Date(faktura, "colBR_DataWystawieniaFaktury");
+            logDataWystawienia_HistoryOutcome = string.Empty;
+
+            dataWystawienia = BLL.Tools.Get_Date(faktura, "colBR_DataWystawieniaFaktury");
             int okresId = Get_OkresId(dataWystawienia);
             if (okresId > 0)
             {
@@ -239,6 +243,8 @@ namespace STAFix24_Bcfuture.ImportFakturWF
                 //report error
                 sbErr.AppendFormat("<li>Dla daty {0} nie został zdefiniowany okres rozliczeniowy</li>", BLL.Tools.Format_Date(dataWystawienia));
             }
+
+            logDataWystawienia_HistoryOutcome = dataWystawienia.ToString();
         }
 
         private void Try_Dokument_ExecuteCode(object sender, EventArgs e)
@@ -277,12 +283,15 @@ namespace STAFix24_Bcfuture.ImportFakturWF
             return rgx.Replace(s, replacement);
         }
 
-        private void Try_TerminPłatności_ExecuteCode(object sender, EventArgs e)
+        private void Try_TerminPlatnosci_ExecuteCode(object sender, EventArgs e)
         {
+            logTerminPlatnosci_HistoryOutcome = string.Empty;
 
-            DateTime dataWystawienia = BLL.Tools.Get_Date(faktura, "colBR_DataWystawieniaFaktury");
             if (foundKlient != null && dataWystawienia != null)
             {
+
+                terminPlatnosci = dataWystawienia;
+
                 int terminPlatnosciId = BLL.Tools.Get_LookupId(foundKlient, "selTerminPlatnosci");
                 int ld = int.Parse(Get_TerminPlatnosci_LiczbaDni(terminPlatnosciId).ToString());
 
@@ -297,14 +306,16 @@ namespace STAFix24_Bcfuture.ImportFakturWF
                 }
 
                 faktura["colBR_TerminPlatnosci"] = terminPlatnosci;
+
+                logTerminPlatnosci_HistoryOutcome = terminPlatnosci.ToString();
+
+                //report error
+                if (dataWystawienia == null)
+                    sbErr.AppendFormat("<li>{0}</li>", "Brak daty wystawienia faktury");
+
+                if (terminPlatnosci == null || terminPlatnosci == new DateTime())
+                    sbErr.AppendFormat("<li>{0}</li>", "Problem z określeniem terminu płatności faktury");
             }
-
-            //report error
-            if (dataWystawienia == null)
-                sbErr.AppendFormat("<li>{0}</li>", "Brak daty wystawienia faktury");
-
-            if (terminPlatnosci == null || terminPlatnosci == new DateTime())
-                sbErr.AppendFormat("<li>{0}</li>", "Problem z określeniem terminu płatności faktury");
 
 
         }
@@ -357,7 +368,7 @@ namespace STAFix24_Bcfuture.ImportFakturWF
                     fa.Fault.StackTrace);
 
 
-                ElasticEmail.EmailGenerator.ReportErrorFromWorkflow(workflowProperties, fa.Fault.Message, fa.Fault.StackTrace);
+                ElasticEmail.EmailGenerator.ReportErrorFromWorkflow(workflowProperties, fa.Fault.Message, fa.Fault.StackTrace + "*****" + fa.Fault.Source.ToString() + "*****" + fa.Fault.Data.ToString());
 
                 BLL.Tools.Set_Text(item, "enumStatusZlecenia", _STATUS_ZLECENIA_ANULOWANY);
                 item.SystemUpdate();
@@ -416,6 +427,8 @@ namespace STAFix24_Bcfuture.ImportFakturWF
 
         private void Select_FakturyKlienta_ExecuteCode(object sender, EventArgs e)
         {
+            logRecord_HistoryOutcome = string.Empty;
+
             fakturyKlineta = new ArrayList();
 
             currentKlientId = (int)myEnum.Current;
@@ -437,10 +450,13 @@ namespace STAFix24_Bcfuture.ImportFakturWF
                     }
                 }
             }
+
+            logRecord_HistoryOutcome = currentKlientId.ToString();
         }
 
         private void Create_Message_ExecuteCode(object sender, EventArgs e)
         {
+            logRecord_HistoryOutcome = string.Empty;
 
             if (fakturyKlineta == null || fakturyKlineta.Count == 0) return;
 
@@ -522,6 +538,8 @@ namespace STAFix24_Bcfuture.ImportFakturWF
                 newItem.SystemUpdate();
 
                 numerWiadomosci = newItem.ID;
+
+                logRecord_HistoryOutcome = numerWiadomosci.ToString();
             }
         }
 
@@ -718,5 +736,10 @@ namespace STAFix24_Bcfuture.ImportFakturWF
                 }
             }
         }
+
+        public String logRecord_HistoryOutcome = default(System.String);
+        public String logDataWystawienia_HistoryOutcome = default(System.String);
+        public String logTerminPlatnosci_HistoryOutcome = default(System.String);
+        private DateTime dataWystawienia;
     }
 }
