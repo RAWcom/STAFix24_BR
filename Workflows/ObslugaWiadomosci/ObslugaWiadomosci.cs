@@ -55,6 +55,16 @@ namespace Workflows.ObslugaWiadomosci
             if (item["colNadawca"] != null)
             {
                 mail.From = new MailAddress(item["colNadawca"].ToString());
+
+                //obsługa adresu powrotnego
+                if (mail.From.Address.ToString().Equals("noreply@stafix24.pl"))
+                {
+                    string replyTo = BLL.admSetup.GetValue(item.Web, "EMAIL_BIURA");
+                    if (!string.IsNullOrEmpty(replyTo))
+                    {
+                        mail.ReplyTo = new MailAddress(replyTo);
+                    }
+                }
             }
             else
             {
@@ -142,7 +152,7 @@ namespace Workflows.ObslugaWiadomosci
                 }
                 else
                 {
-                    var r = ElasticEmail.EmailGenerator.SendMail(string.Format(@"Animus Message#{0} not sent", item.ID.ToString()), string.Empty);
+                    var r = ElasticEmail.EmailGenerator.SendMail(string.Format(@"{1} Message#{0} not sent", item.ID.ToString(), item.ParentList.ParentWebUrl), string.Empty);
                 }
             }
         }

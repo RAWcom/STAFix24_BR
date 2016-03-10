@@ -61,7 +61,7 @@ namespace SPEmail
             SendMailWithAttachment(item, message);
         }
 
-        
+
         /// <summary>
         /// główna procedura dystrybucji wiadomości
         /// </summary>
@@ -85,9 +85,18 @@ namespace SPEmail
                     message.From = new MailAddress(message.From.Address, Format_SenderDisplayName(item.Web, message.From.Address));
                 }
 
-                //ustaw adres zwrotny
-                //message.ReplyTo = message.From;
-                message.ReplyTo = new MailAddress(message.From.Address, Format_SenderDisplayName(item.Web, message.From.Address));
+                //ustaw adres zwrotny 
+
+                message.ReplyTo = message.From;
+
+                if (message.From.Address.ToString().Equals("noreply@stafix24.pl"))
+                {
+                    string replyTo = BLL.admSetup.GetValue(item.Web, "EMAIL_BIURA");
+                    if (!string.IsNullOrEmpty(replyTo))
+                    {
+                        message.ReplyTo = new MailAddress(replyTo, Format_SenderDisplayName(item.Web, string.Empty));
+                    }
+                }
 
                 for (int attachmentIndex = 0; attachmentIndex < item.Attachments.Count; attachmentIndex++)
                 {
@@ -112,7 +121,7 @@ namespace SPEmail
 
                 //client.Send(message);
                 BLL.Tools.DoWithRetry(() => client.Send(message));
-                
+
 
                 result = true;
 
